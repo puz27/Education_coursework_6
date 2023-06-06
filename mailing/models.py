@@ -1,9 +1,9 @@
 from django.db import models
 
 
-class Client(models.Model):
+class Clients(models.Model):
     full_name = models.CharField(max_length=100, verbose_name="client_name", null=False, blank=False)
-    comment = models.CharField(max_length=255, verbose_name="comment_about_client", null=True, blank=True)
+    comment = models.CharField(max_length=100, verbose_name="comment_about_client", null=True, blank=True)
     email = models.EmailField(max_length=255, help_text="client name for mailing",  verbose_name="client_mail", null=False, blank=False)
     transmission = models.ManyToManyField("Transmission")
 
@@ -31,7 +31,7 @@ class Transmission(models.Model):
     time = models.DateTimeField(verbose_name="start_time_for_sending")
     frequency = models.CharField(choices=TransmissionFrequency.choices)
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
-    message = models.ForeignKey("Message", on_delete=models.CASCADE)
+    message = models.ForeignKey("Messages", on_delete=models.CASCADE)
     attempt = models.ForeignKey("Attempt", on_delete=models.CASCADE)
 
     class Meta:

@@ -1,8 +1,8 @@
 from django.urls import path
-from mailing.views import main_page, messages_create, user_create
+from mailing.views import MessagesView, ClientsView, MainView
 
 urlpatterns = [
-    path("", main_page, name="main_page"),
-    path("messages/", messages_create, name="messages"),
-    path("users/", user_create, name="users"),
+    path("", MainView.as_view(), name="main_page"),
+    path("messages/", MessagesView.as_view(), name="messages"),
+    path("clients/", ClientsView.as_view(), name="clients"),
 ]

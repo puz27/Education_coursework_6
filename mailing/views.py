@@ -1,22 +1,35 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from models import Messages
+from mailing.models import Messages, Clients
 
 
-def main_page(request):
-    context = {"Title": "Title!!!"}
-    return render(request, "mailing/main.html", context)
+class MainView(ListView):
+    model = Messages
+    template_name = "mailing/main.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Main"
+        return context
 
 
-def messages_create(request):
-    context = {"Title": "Message!!!"}
-    return render(request, "mailing/messages.html", context)
+class ClientsView(ListView):
+    model = Messages
+    template_name = "mailing/clients.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Clients"
+        context["Clients"] = Clients.objects.all()
+        return context
 
 
-def user_create(request):
-    return render(request, "mailing/main.html")
-
-
-class Messages(ListView):
+class MessagesView(ListView):
     model = Messages
     template_name = "mailing/messages.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Messages"
+        context["Messages"] = Messages.objects.all()
+        return context

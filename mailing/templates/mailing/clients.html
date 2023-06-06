@@ -11,11 +11,12 @@
               <th scope="col">Header</th>
             </tr>
         </thead>
-{% for message in Messages %}
+{% for client in Clients %}
   <tbody>
     <tr>
-        <td>{{message.pk}}</td>
-        <td>{{message.theme}}</td>
+        <td>{{client.full_name}}</td>
+        <td>{{client.email}}</td>
+        <td>{{client.comment}}</td>
     </tr>
   </tbody>
 {% endfor %}

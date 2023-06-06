@@ -1,8 +1,8 @@
 from django.contrib import admin
-from mailing.models import Client, Transmission, Messages, Attempt
+from mailing.models import Clients, Transmission, Messages, Attempt
 
 
-@admin.register(Client)
+@admin.register(Clients)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", "comment")
     search_fields = ("full_name", "email")
@@ -11,14 +11,14 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 @admin.register(Transmission)
-class Transmission(admin.ModelAdmin):
+class TransmissionAdmin(admin.ModelAdmin):
     list_display = ("title", "time", "frequency", "status")
     list_filter = ("status",)
     # prepopulated_fields = {"slug": ("full_name",)}
 
 
 @admin.register(Messages)
-class Message(admin.ModelAdmin):
+class MessageAdmin(admin.ModelAdmin):
     list_display = ("theme",)
     search_fields = ("theme",)
     list_filter = ("theme",)
@@ -26,6 +26,7 @@ class Message(admin.ModelAdmin):
 
 
 @admin.register(Attempt)
-class Attempt(admin.ModelAdmin):
+class AttemptAdmin(admin.ModelAdmin):
    pass
+
 
