@@ -42,7 +42,7 @@ class Transmission(models.Model):
         return f"{self.time} {self.frequency} {self.status}"
 
 
-class Message(models.Model):
+class Messages(models.Model):
     theme = models.CharField(max_length=50, verbose_name="message_theme", null=False, blank=False)
     body = models.TextField(max_length=500, verbose_name="message_body", null=False, blank=False)
 

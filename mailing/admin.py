@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mailing.models import Client, Transmission, Message, Attempt
+from mailing.models import Client, Transmission, Messages, Attempt
 
 
 @admin.register(Client)
@@ -17,7 +17,7 @@ class Transmission(admin.ModelAdmin):
     # prepopulated_fields = {"slug": ("full_name",)}
 
 
-@admin.register(Message)
+@admin.register(Messages)
 class Message(admin.ModelAdmin):
     list_display = ("theme",)
     search_fields = ("theme",)
