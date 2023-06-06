@@ -12,7 +12,9 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Transmission)
 class Transmission(admin.ModelAdmin):
-    pass
+    list_display = ("title", "time", "frequency", "status")
+    list_filter = ("status",)
+    # prepopulated_fields = {"slug": ("full_name",)}
 
 
 @admin.register(Message)
