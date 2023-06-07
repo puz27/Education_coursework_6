@@ -2,10 +2,9 @@ from django.db import models
 
 
 class Clients(models.Model):
-    full_name = models.CharField(max_length=100, verbose_name="client_name", null=False, blank=False)
-    comment = models.CharField(max_length=100, verbose_name="comment_about_client", null=True, blank=True)
-    email = models.EmailField(max_length=255, help_text="client name for mailing",  verbose_name="client_mail", null=False, blank=False)
-    transmission = models.ManyToManyField("Transmission")
+    full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False)
+    comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
+    email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False)
 
     class Meta:
         verbose_name = "Client"
@@ -27,12 +26,13 @@ class Transmission(models.Model):
         Weekly = 'WEEKLY'
         Monthly = 'MONTHLY'
 
-    title = models.CharField(max_length=100, verbose_name="transmission_name", null=False, blank=False, unique=True)
-    time = models.DateTimeField(verbose_name="start_time_for_sending")
+    title = models.CharField(max_length=100, verbose_name="transmission name", null=False, blank=False, unique=True)
+    time = models.DateTimeField(verbose_name="start time for sending", )
     frequency = models.CharField(choices=TransmissionFrequency.choices)
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
-    message = models.ForeignKey("Messages", on_delete=models.CASCADE)
-    attempt = models.ForeignKey("Attempt", on_delete=models.CASCADE)
+    message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
+    attempt = models.ForeignKey("Attempt", on_delete=models.CASCADE, null=True, blank=True)
+    clients = models.ManyToManyField("Clients")
 
     class Meta:
         verbose_name = "Transmission"
@@ -43,8 +43,8 @@ class Transmission(models.Model):
 
 
 class Messages(models.Model):
-    theme = models.CharField(max_length=50, verbose_name="message_theme", null=False, blank=False)
-    body = models.TextField(max_length=500, verbose_name="message_body", null=False, blank=False)
+    theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)
+    body = models.TextField(max_length=500, verbose_name="message body", null=False, blank=False)
 
     class Meta:
         verbose_name = "Message"
@@ -61,9 +61,9 @@ class Attempt(models.Model):
         Created = 'CREATED'
         Running = 'RUNNING'
 
-    time = models.DateTimeField(verbose_name="last_time_for_send", default=None, null=True, blank=True)
+    time = models.DateTimeField(verbose_name="last time for send", default=None, null=True, blank=True)
     status = models.CharField(choices=AttemptStatus.choices, default=AttemptStatus.Created)
-    mail_answer = models.CharField(verbose_name="answer_from_mailserver", default=None, null=True, blank=True)
+    mail_answer = models.CharField(verbose_name="answer from mailserver", default=None, null=True, blank=True)
 
     class Meta:
         verbose_name = "Attempt"

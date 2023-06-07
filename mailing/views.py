@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from mailing.models import Messages, Clients
+from mailing.models import Messages, Clients, Transmission
 
 
 class MainView(ListView):
@@ -14,7 +15,7 @@ class MainView(ListView):
 
 
 class ClientsView(ListView):
-    model = Messages
+    model = Clients
     template_name = "mailing/clients.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -22,6 +23,20 @@ class ClientsView(ListView):
         context["Title"] = "Clients"
         context["Clients"] = Clients.objects.all()
         return context
+
+
+class ClientsCreate(CreateView):
+    model = Clients
+    template_name = "mailing/client_create.html"
+    fields = ["full_name", "email", "comment"]
+
+    def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Add New Client"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('clients')
 
 
 class MessagesView(ListView):
@@ -33,3 +48,47 @@ class MessagesView(ListView):
         context["Title"] = "Messages"
         context["Messages"] = Messages.objects.all()
         return context
+
+
+class MessageCreate(CreateView):
+    model = Messages
+    template_name = "mailing/message_create.html"
+    fields = ["theme", "body"]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Create Message Template"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('messages')
+
+
+class TransmissionView(ListView):
+    model = Transmission
+    template_name = "mailing/transmissions.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Transmissions"
+        context["Transmissions"] = Transmission.objects.all()
+        context["Clients"] = Transmission.clients
+        return context
+
+
+class TransmissionCreate(CreateView):
+    model = Transmission
+    template_name = "mailing/transmission_create.html"
+    fields = ["title", "time", "frequency", "message", "clients"]
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Create New Transmission"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('transmissions')
+
+
+
+
