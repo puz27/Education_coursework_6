@@ -3,9 +3,15 @@
 {{ test }}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div><p>
+    {{ form.title }}<p>
+    <input type="date" name="{{ form.time }}"> <p>
+    <input type="time" name="{{ form.time }}"> <p>
+    {{ form.frequency }}<p>
+    {{ form.message }}<p>
+    {{ form.clients }}<p>
 
-
+    </div>
     <input type="submit" value="{% if new_client %} Create Message Template {% else %} Create New Transmission {% endif %}">
 </form>
 {% endblock %}

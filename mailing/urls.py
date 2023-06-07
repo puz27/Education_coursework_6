@@ -1,6 +1,7 @@
 from django.urls import path
 from mailing.views import MessagesView, ClientsView, MainView, ClientsCreate, MessageCreate, TransmissionCreate,\
-    TransmissionView
+    TransmissionView, TransmissionDelete
+
 
 urlpatterns = [
     path("", MainView.as_view(), name="main_page"),
@@ -11,4 +12,5 @@ urlpatterns = [
 
     path("transmissions/", TransmissionView.as_view(), name="transmissions"),
     path("transmission_create/", TransmissionCreate.as_view(), name="transmission_create"),
+    path("transmission_delete/<int:pk>", TransmissionDelete.as_view(), name="transmission_delete"),
 ]

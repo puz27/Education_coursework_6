@@ -85,7 +85,6 @@ class TransmissionView(ListView):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmissions"
         context["Transmissions"] = Transmission.objects.all()
-        context["Clients"] = Transmission.clients
         return context
 
 
@@ -102,6 +101,20 @@ class TransmissionCreate(CreateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('transmissions')
 
+
+class TransmissionDelete(DeleteView):
+    model = Transmission
+    template_name = "mailing/transmission_delete.html"
+    # slug_url_kwarg = "update_slug"
+    pk_url_kwarg = "pk"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Delete Transmission"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('transmissions')
 
 
 

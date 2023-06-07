@@ -14,6 +14,7 @@ class ClientAdmin(admin.ModelAdmin):
 class TransmissionAdmin(admin.ModelAdmin):
     list_display = ("title", "time", "frequency", "status")
     list_filter = ("status",)
+    filter_horizontal = ["clients"]
     # prepopulated_fields = {"slug": ("full_name",)}
 
 

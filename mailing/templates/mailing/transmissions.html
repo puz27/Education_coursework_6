@@ -9,7 +9,7 @@
               <th scope="col">Header</th>
               <th scope="col">Header</th>
               <th scope="col">Header</th>
-              <th scope="col">Header</th>
+
 
             </tr>
         </thead>
@@ -20,7 +20,9 @@
         <td>{{transmission.title}}</td>
         <td>{{transmission.frequency}}</td>
         <td>{{transmission.status}}</td>
-        <td>{{transmission.clients}}</td>
+        <td> <a href="{% url 'transmission_delete' transmission.pk %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
+
+
     </tr>
   </tbody>
 {% endfor %}
