@@ -39,6 +39,19 @@ class ClientsCreate(CreateView):
         return reverse_lazy('clients')
 
 
+# class ClientsDelete(DeleteView):
+#     model = Clients
+#     template_name = "mailing/client_create.html"
+#
+#     def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["Title"] = "Delete Client"
+#         return context
+#
+#     def get_success_url(self, **kwargs):
+#         return reverse_lazy('clients')
+
+
 class MessagesView(ListView):
     model = Messages
     template_name = "mailing/messages.html"
