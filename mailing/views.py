@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
 
@@ -126,6 +127,44 @@ class TransmissionCreate(CreateView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('transmissions')
+
+
+# class TransmissionCreate(View):
+#
+#     def get(self, request, *args, **kwargs):
+#         return render(request, 'mailing/transmission_create.html', {'form': CreateTransmissionForm(), })
+#
+#     def post(self, request, *args, **kwargs):
+#         form = CreateTransmissionForm(data=request.POST)
+#         if form.is_valid():
+#             title = form.cleaned_data['title']
+#             frequency = form.cleaned_data['frequency']
+#             status = form.cleaned_data['status']
+#             message = form.cleaned_data['message']
+#             date = form.cleaned_data.get('date')
+#             time = form.cleaned_data.get('time')
+#             clients = form.cleaned_data['clients']
+#             obj = Transmission.objects.create(title=title,
+#                                               date=date,
+#                                               time=time,
+#                                               frequency=frequency,
+#                                               status=status,
+#                                               message=message,
+#                                               clients=object.set(clients))
+#             obj.save()
+#             # return redirect('transmissions', pk=obj.pk)
+#
+#         return self.get(request)
+
+
+
+    # def post(self, request, *args, **kwargs):
+    #     form = TaskForm(data=request.POST)
+    #     if form.is_valid():
+    #         task = form.save()
+    #         return redirect('task-detail', pk=task.pk)
+    #
+    #     return self.get(request)
 
 
 class TransmissionDelete(DeleteView):

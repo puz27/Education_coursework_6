@@ -1,14 +1,14 @@
 # from django import forms
-# from mailing.models import Transmission
+# from django.forms import SelectDateWidget
+#
+# from mailing.models import Transmission, Messages, Clients
 # from django.contrib.admin import widgets
 #
 #
-# class TransmissionForm(forms.ModelForm):
-#     class Meta:
-#         model = Transmission
+# class CreateTransmissionForm(forms.Form):
 #
-#     def __init__(self, *args, **kwargs):
-#         super(TransmissionForm, self).__init__(*args, **kwargs)
-#         self.fields['mydate'].widget = widgets.AdminDateWidget()
-#         self.fields['mytime'].widget = widgets.AdminTimeWidget()
-#         self.fields['mydatetime'].widget = widgets.AdminSplitDateTime()
+#         title = forms.CharField(max_length=100)
+#         frequency = forms.CharField()
+#         status = forms.CharField()
+#         message = forms.ModelChoiceField(queryset=Messages.objects.all())
+#         clients = forms.ModelChoiceField(queryset=Clients.objects.all())
