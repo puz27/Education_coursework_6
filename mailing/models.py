@@ -33,8 +33,8 @@ class Transmission(models.Model):
     frequency = models.CharField(choices=TransmissionFrequency.choices)
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
-    attempt = models.ForeignKey("Attempt", on_delete=models.CASCADE, null=True, blank=True)
     clients = models.ManyToManyField("Clients")
+    statistic = models.OneToOneField("Statistic", on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = "Transmission"
@@ -56,20 +56,19 @@ class Messages(models.Model):
         return f"Message: {self.theme}"
 
 
-class Attempt(models.Model):
+class Statistic(models.Model):
 
     class AttemptStatus(models.TextChoices):
         Finished = 'FINISHED'
         Created = 'CREATED'
-        Running = 'RUNNING'
 
     time = models.DateTimeField(verbose_name="last time for send", default=None, null=True, blank=True)
     status = models.CharField(choices=AttemptStatus.choices, default=AttemptStatus.Created)
     mail_answer = models.CharField(verbose_name="answer from mailserver", default=None, null=True, blank=True)
 
     class Meta:
-        verbose_name = "Attempt"
-        verbose_name_plural = "Attempts"
+        verbose_name = "Statistic"
+        verbose_name_plural = "Statistics"
 
     def __str__(self):
-        return f"{self.time} {self.status}"
+        return f"{self.status} | {self.time} | {self.mail_answer}"
