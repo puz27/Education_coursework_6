@@ -39,6 +39,19 @@ class ClientsCreate(CreateView):
         return reverse_lazy('clients')
 
 
+class ClientsDelete(DeleteView):
+    model = Clients
+    template_name = "mailing/delete.html"
+
+    def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Delete Client"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('clients')
+
+
 # class ClientsDelete(DeleteView):
 #     model = Clients
 #     template_name = "mailing/client_create.html"
@@ -77,6 +90,19 @@ class MessageCreate(CreateView):
         return reverse_lazy('messages')
 
 
+class MessageDelete(DeleteView):
+    model = Messages
+    template_name = "mailing/delete.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Delete Message"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('messages')
+
+
 class TransmissionView(ListView):
     model = Transmission
     template_name = "mailing/transmissions.html"
@@ -104,7 +130,7 @@ class TransmissionCreate(CreateView):
 
 class TransmissionDelete(DeleteView):
     model = Transmission
-    template_name = "mailing/transmission_delete.html"
+    template_name = "mailing/delete.html"
     # slug_url_kwarg = "update_slug"
     pk_url_kwarg = "pk"
 

@@ -39,7 +39,7 @@ class Transmission(models.Model):
         verbose_name_plural = "Transmission Templates"
 
     def __str__(self):
-        return f"{self.time} {self.frequency} {self.status}"
+        return f"Transmission: {self.title}"
 
 
 class Messages(models.Model):
@@ -51,7 +51,7 @@ class Messages(models.Model):
         verbose_name_plural = "Messages"
 
     def __str__(self):
-        return f"{self.theme}"
+        return f"Message: {self.theme}"
 
 
 class Attempt(models.Model):
