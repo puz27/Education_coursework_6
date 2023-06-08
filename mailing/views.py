@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
+from mailing.utils import sendmail
 
 
 class MainView(ListView):
@@ -128,6 +127,14 @@ class TransmissionCreate(CreateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('transmissions')
 
+    def get_object(self):
+        obj = super().get_object()
+        obj.view_count += 1
+        obj.save()
+
+        if obj.view_count == 35:
+            sendmail("n.avramenko87@yandex.ru", self.get_object())
+        return obj
 
 # class TransmissionCreate(View):
 #
@@ -165,8 +172,6 @@ class TransmissionCreate(CreateView):
     #         return redirect('task-detail', pk=task.pk)
     #
     #     return self.get(request)
-
-
 class TransmissionDelete(DeleteView):
     model = Transmission
     template_name = "mailing/delete.html"
