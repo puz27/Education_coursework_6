@@ -17,7 +17,7 @@
         <td>{{client.full_name}}</td>
         <td>{{client.email}}</td>
         <td>{{client.comment}}</td>
-        <td><a href="{% url 'client_delete' client.pk %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>>
+        <td><a href="{% url 'mailing:client_delete' client.pk %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>>
     </tr>
   </tbody>
 {% endfor %}

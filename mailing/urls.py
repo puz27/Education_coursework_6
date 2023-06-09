@@ -2,6 +2,8 @@ from django.urls import path
 from mailing.views import MessagesView, ClientsView, MainView, ClientsCreate, MessageCreate, TransmissionCreate,\
     TransmissionView, TransmissionDelete, MessageDelete, ClientsDelete
 
+app_name = "mailing"
+
 
 urlpatterns = [
     path("", MainView.as_view(), name="main_page"),

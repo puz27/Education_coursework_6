@@ -36,7 +36,7 @@ class ClientsCreate(CreateView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('clients')
+        return reverse_lazy('mailing:clients')
 
 
 class ClientsDelete(DeleteView):
@@ -49,7 +49,7 @@ class ClientsDelete(DeleteView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('clients')
+        return reverse_lazy('mailing:clients')
 
 
 # class ClientsDelete(DeleteView):
@@ -87,7 +87,7 @@ class MessageCreate(CreateView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('messages')
+        return reverse_lazy('mailing:messages')
 
 
 class MessageDelete(DeleteView):
@@ -100,7 +100,7 @@ class MessageDelete(DeleteView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('messages')
+        return reverse_lazy('mailing:messages')
 
 
 class TransmissionView(ListView):
@@ -125,7 +125,7 @@ class TransmissionCreate(CreateView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('transmissions')
+        return reverse_lazy('mailing:transmissions')
 
     def get_object(self):
         obj = super().get_object()
@@ -184,7 +184,7 @@ class TransmissionDelete(DeleteView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('transmissions')
+        return reverse_lazy('mailing:transmissions')
 
 
 
