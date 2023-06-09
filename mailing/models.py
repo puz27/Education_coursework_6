@@ -12,7 +12,7 @@ class Clients(models.Model):
         verbose_name_plural = "Clients"
 
     def __str__(self):
-        return f"{self.full_name}"
+        return f"{self.full_name} "
 
 
 class Transmission(models.Model):
@@ -53,8 +53,11 @@ class Messages(models.Model):
         verbose_name_plural = "Messages"
 
     def __str__(self):
-        return f"Message: {self.theme}"
+        return f"{self.theme, self.body}"
 
+    def get_info(self):
+        """Return information for sending to client"""
+        return self.theme, self.body
 
 class Statistic(models.Model):
 

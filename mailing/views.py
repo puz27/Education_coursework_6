@@ -127,14 +127,15 @@ class TransmissionCreate(CreateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('mailing:transmissions')
 
-    def get_object(self):
-        obj = super().get_object()
-        obj.view_count += 1
-        obj.save()
+    def form_valid(self, form):
+        print("---------------------------------------------------------")
+        self.object = form.save()
+        send_message = self.object.message.get_info()
+        for client in self.object.clients.all():
+            print(client.email)
+            sendmail(client.email, send_message[0], send_message[1])
+        return super().form_valid(form)
 
-        if obj.view_count == 35:
-            sendmail("n.avramenko87@yandex.ru", self.get_object())
-        return obj
 
 # class TransmissionCreate(View):
 #
@@ -172,6 +173,8 @@ class TransmissionCreate(CreateView):
     #         return redirect('task-detail', pk=task.pk)
     #
     #     return self.get(request)
+
+
 class TransmissionDelete(DeleteView):
     model = Transmission
     template_name = "mailing/delete.html"
