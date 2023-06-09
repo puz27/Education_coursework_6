@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mailing',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': '123456',
         }
 }
 
@@ -113,8 +113,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
-
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -138,3 +137,7 @@ EMAIL_HOST_USER = 'n.avramenko87@gmail.com'
 EMAIL_HOST_PASSWORD = 'XXXXXXXXXXXXXXXXXXX'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+DATETIME_FORMAT = "%Y-%m-%d%H:%M"
+

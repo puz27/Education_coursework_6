@@ -34,7 +34,7 @@ class Transmission(models.Model):
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
     clients = models.ManyToManyField("Clients")
-    statistic = models.OneToOneField("Statistic", on_delete=models.CASCADE, null=True, blank=True)
+    statistic = models.OneToOneField("Statistic", on_delete=models.CASCADE, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = "Transmission"
@@ -58,6 +58,7 @@ class Messages(models.Model):
     def get_info(self):
         """Return information for sending to client"""
         return self.theme, self.body
+
 
 class Statistic(models.Model):
 

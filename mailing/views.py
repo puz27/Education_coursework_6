@@ -119,6 +119,7 @@ class TransmissionCreate(CreateView):
     template_name = "mailing/transmission_create.html"
     fields = ["title", "time", "frequency", "message", "clients"]
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Create New Transmission"
@@ -127,10 +128,15 @@ class TransmissionCreate(CreateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('mailing:transmissions')
 
+
+
     def form_valid(self, form):
         print("---------------------------------------------------------")
         self.object = form.save()
         send_message = self.object.message.get_info()
+        # send_time = self.object.
+        # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!", send_time)
+
         for client in self.object.clients.all():
             print(client.email)
             sendmail(client.email, send_message[0], send_message[1])
