@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from mailing.utils import d_slugify
 
 
 class Clients(models.Model):
@@ -35,10 +36,16 @@ class Transmission(models.Model):
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
     clients = models.ManyToManyField("Clients")
     statistic = models.OneToOneField("Statistic", on_delete=models.CASCADE, null=True, blank=True)
+    slug = models.SlugField(max_length=255, verbose_name="transmission slug", null=False, unique=True)
 
     class Meta:
         verbose_name = "Transmission"
         verbose_name_plural = "Transmission Templates"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = d_slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Transmission: {self.title}"
@@ -58,6 +65,7 @@ class Messages(models.Model):
     def get_info(self):
         """Return information for sending to client"""
         return self.theme, self.body
+
 
 class Statistic(models.Model):
 

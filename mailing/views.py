@@ -103,6 +103,21 @@ class MessageDelete(DeleteView):
         return reverse_lazy('mailing:messages')
 
 
+class TransmissionCard(DetailView):
+    model = Transmission
+    template_name = "mailing/transmission_card.html"
+    slug_url_kwarg = "transmission_slug"
+
+    def get_object(self, queryset=None):
+        one_transmission = super().get_object()
+        return one_transmission
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Transmission Full Information"
+        return context
+
+
 class TransmissionView(ListView):
     model = Transmission
     template_name = "mailing/transmissions.html"
@@ -174,12 +189,11 @@ class TransmissionCreate(CreateView):
     #
     #     return self.get(request)
 
-
 class TransmissionDelete(DeleteView):
     model = Transmission
     template_name = "mailing/delete.html"
-    # slug_url_kwarg = "update_slug"
-    pk_url_kwarg = "pk"
+    slug_url_kwarg = "transmission_slug"
+    # pk_url_kwarg = "pk"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
