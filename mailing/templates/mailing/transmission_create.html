@@ -2,10 +2,8 @@
 {% block body %}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div><p>
+    <div>
     {{ form.as_p }}
-<!--   <input type="date" id="date" value="{{form.date|date}} ">-->
-<!--   <input type="time" id="time" value="{{form.time|time}} ">-->
     </div>
     <input type="submit" value="Create New Transmission">
 </form>

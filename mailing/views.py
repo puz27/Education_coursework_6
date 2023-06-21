@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
 from mailing.utils import sendmail
+from mailing.forms import TransmissionForm
 
 
 class MainView(ListView):
@@ -132,9 +133,8 @@ class TransmissionView(ListView):
 
 class TransmissionCreate(CreateView):
     model = Transmission
+    form_class = TransmissionForm
     template_name = "mailing/transmission_create.html"
-    fields = ["title", "time", "frequency", "message", "clients"]
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
