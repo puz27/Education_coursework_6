@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mailing',
         'USER': 'postgres',
-        'PASSWORD': '123456',
+        'PASSWORD': 'postgres',
         }
 }
 

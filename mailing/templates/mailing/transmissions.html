@@ -25,10 +25,10 @@
         <td>{{transmission.frequency}}</td>
         <td>{{transmission.status}}</td>
         <td>{{transmission.time}}</td>
-         <td>{{transmission.statistic}}</td>
-        <td></td>
+        <td>{{transmission.statistic}}</td>
+        <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Show</a></td>
         <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
-        <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">All Info</a></td>
+
 
     </tr>
   </tbody>
