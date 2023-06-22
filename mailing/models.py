@@ -50,6 +50,10 @@ class Transmission(models.Model):
     def __str__(self):
         return f"Transmission: {self.title}"
 
+    @property
+    def get_statistic(self):
+        return self.statistic_set.all()
+
 
 class Messages(models.Model):
     theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)

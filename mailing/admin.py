@@ -12,7 +12,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Transmission)
 class TransmissionAdmin(admin.ModelAdmin):
-    list_display = ("title", "time", "frequency", "status", "statistic")
+    list_display = ("title", "time", "frequency", "status")
     list_filter = ("status",)
     filter_horizontal = ["clients"]
     # prepopulated_fields = {"slug": ("full_name",)}
@@ -28,7 +28,9 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Statistic)
 class AttemptAdmin(admin.ModelAdmin):
-   list_display = ("time", "status", "mail_answer",)
+    list_display = ("time", "status", "mail_answer")
+
+
 
 
 
