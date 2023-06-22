@@ -134,6 +134,12 @@ class TransmissionCreate(CreateView):
         return reverse_lazy('mailing:transmissions')
 
     def form_valid(self, form):
+
+        # default_statistic = Statistic.objects.create(transmission=7)
+        print(form)
+        self.object = form.save()
+        current_pk = self.object
+        print(current_pk)
         print("---------------------------------------------------------")
         self.object = form.save()
         send_message = self.object.message.get_info()
@@ -144,6 +150,8 @@ class TransmissionCreate(CreateView):
             print(client.email)
             sendmail(client.email, send_message[0], send_message[1])
         return super().form_valid(form)
+
+
 # class TransmissionCreate(View):
 #
 #     def get(self, request, *args, **kwargs):
