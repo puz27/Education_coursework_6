@@ -87,4 +87,4 @@ class Statistic(models.Model):
         verbose_name_plural = "Statistics"
 
     def __str__(self):
-        return f"{self.status} | {self.time} | {self.mail_answer}"
+        return f"Status: {self.status} Time: {self.time} Mail answer: {self.mail_answer}"

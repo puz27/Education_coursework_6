@@ -53,19 +53,6 @@ class ClientsDelete(DeleteView):
         return reverse_lazy('mailing:clients')
 
 
-# class ClientsDelete(DeleteView):
-#     model = Clients
-#     template_name = "mailing/client_create.html"
-#
-#     def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["Title"] = "Delete Client"
-#         return context
-#
-#     def get_success_url(self, **kwargs):
-#         return reverse_lazy('clients')
-
-
 class MessagesView(ListView):
     model = Messages
     template_name = "mailing/messages.html"
@@ -116,9 +103,9 @@ class TransmissionCard(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmission Full Information"
-        statistic = self.get_object()
-        context["Transmission"] = Transmission.objects.all()
-        context["Statistic"] = statistic.get_statistic
+        current_object = self.get_object()
+        context["Transmission"] = current_object
+        context["Statistic"] = current_object.get_statistic[0]
         return context
 
 
@@ -151,7 +138,7 @@ class TransmissionCreate(CreateView):
         self.object = form.save()
         send_message = self.object.message.get_info()
         # send_time = self.object.
-        # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!", send_time)
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         for client in self.object.clients.all():
             print(client.email)
@@ -193,6 +180,7 @@ class TransmissionCreate(CreateView):
     #         return redirect('task-detail', pk=task.pk)
     #
     #     return self.get(request)
+
 
 class TransmissionDelete(DeleteView):
     model = Transmission

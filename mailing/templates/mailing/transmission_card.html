@@ -1,8 +1,9 @@
 {% extends 'mailing/base.html' %}
 {% block body %}
-{{ Transmission }}
+<p>{{ Transmission }}</p>
+{{ Transmission.frequency }}
+{{ Transmission.message }}
 <p>-------------------------</p>
 {{ Statistic }}
-{{ Statistic.time }}
-{{ Statistic.status }}
+
 {% endblock %}
