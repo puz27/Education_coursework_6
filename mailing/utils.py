@@ -1,6 +1,8 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.defaultfilters import slugify as d_slugify
+from django.views.debug import ExceptionReporter
+from django_cron import CronJobBase, Schedule
 
 
 def slugify(words: str) -> str:
@@ -22,6 +24,16 @@ def sendmail(to, subject, message):
               message,
               settings.EMAIL_HOST_USER,
               [to],
-              fail_silently=False)
+              fail_silently=True
+            )
 
 
+class MyCronJob(CronJobBase):
+    RUN_EVERY_MINUTES = 1
+    RUN_AT_TIMES = ['11:30', '14:00', '23:15']
+    schedule = Schedule(run_at_times=RUN_EVERY_MINUTES)
+
+    def do_work(self):
+        sendmail("anv@woori.ru", "TEST", "TEST")
+
+MyCronJob.RUN_AT_TIMES.append(13)

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
@@ -136,20 +138,24 @@ class TransmissionCreate(CreateView):
 
     def form_valid(self, form):
 
+        # Create default data statistic
         current_transmission = self.object
         print(current_transmission)
         print("---------------------------------------------------------")
         self.object = form.save()
         Statistic.objects.create(transmission_id=self.object.pk)
 
+        # Executing send message
+        schedule_transmission_time = self.object.time
+        today_time = datetime.now()
+        if schedule_transmission_time <= today_time:
+            send_message = self.object.message.get_info()
+            print("!SEND MESSAGE!")
+            for client in self.object.clients.all():
+                print(client.email)
+                sendmail(client.email, send_message[0], send_message[1])
+                print(sendmail.__dict__)
 
-        send_message = self.object.message.get_info()
-        # send_time = self.object.
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-        for client in self.object.clients.all():
-            print(client.email)
-            sendmail(client.email, send_message[0], send_message[1])
         return super().form_valid(form)
 
 
