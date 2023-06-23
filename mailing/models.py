@@ -13,7 +13,7 @@ class Clients(models.Model):
         verbose_name_plural = "Clients"
 
     def __str__(self):
-        return f"{self.full_name} "
+        return self.full_name
 
 
 class Transmission(models.Model):
@@ -35,7 +35,6 @@ class Transmission(models.Model):
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
     clients = models.ManyToManyField("Clients")
-    # statistic = models.OneToOneField("Statistic", on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(max_length=255, verbose_name="transmission slug", null=False, unique=True)
 
     class Meta:
@@ -52,7 +51,7 @@ class Transmission(models.Model):
 
     @property
     def get_statistic(self):
-        return self.statistic_set.all()
+        return self.statistic_of_transmission.all()
 
 
 class Messages(models.Model):
@@ -77,7 +76,7 @@ class Statistic(models.Model):
         Finished = 'FINISHED'
         Created = 'CREATED'
 
-    transmission = models.ForeignKey("Transmission", on_delete=models.CASCADE)
+    transmission = models.ForeignKey("Transmission", on_delete=models.CASCADE, related_name="statistic_of_transmission")
     time = models.DateTimeField(verbose_name="last time for send", default=None, null=True, blank=True)
     status = models.CharField(choices=AttemptStatus.choices, default=AttemptStatus.Created)
     mail_answer = models.CharField(verbose_name="answer from mailserver", default=None, null=True, blank=True)

@@ -106,6 +106,7 @@ class TransmissionCard(DetailView):
         current_object = self.get_object()
         context["Transmission"] = current_object
         context["Statistic"] = current_object.get_statistic[0]
+        print(current_object.get_statistic[0])
         return context
 
 
@@ -135,13 +136,13 @@ class TransmissionCreate(CreateView):
 
     def form_valid(self, form):
 
-        # default_statistic = Statistic.objects.create(transmission=7)
-        print(form)
-        self.object = form.save()
-        current_pk = self.object
-        print(current_pk)
+        current_transmission = self.object
+        print(current_transmission)
         print("---------------------------------------------------------")
         self.object = form.save()
+        Statistic.objects.create(transmission_id=self.object.pk)
+
+
         send_message = self.object.message.get_info()
         # send_time = self.object.
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -150,44 +151,6 @@ class TransmissionCreate(CreateView):
             print(client.email)
             sendmail(client.email, send_message[0], send_message[1])
         return super().form_valid(form)
-
-
-# class TransmissionCreate(View):
-#
-#     def get(self, request, *args, **kwargs):
-#         return render(request, 'mailing/transmission_create.html', {'form': CreateTransmissionForm(), })
-#
-#     def post(self, request, *args, **kwargs):
-#         form = CreateTransmissionForm(data=request.POST)
-#         if form.is_valid():
-#             title = form.cleaned_data['title']
-#             frequency = form.cleaned_data['frequency']
-#             status = form.cleaned_data['status']
-#             message = form.cleaned_data['message']
-#             date = form.cleaned_data.get('date')
-#             time = form.cleaned_data.get('time')
-#             clients = form.cleaned_data['clients']
-#             obj = Transmission.objects.create(title=title,
-#                                               date=date,
-#                                               time=time,
-#                                               frequency=frequency,
-#                                               status=status,
-#                                               message=message,
-#                                               clients=object.set(clients))
-#             obj.save()
-#             # return redirect('transmissions', pk=obj.pk)
-#
-#         return self.get(request)
-
-
-
-    # def post(self, request, *args, **kwargs):
-    #     form = TaskForm(data=request.POST)
-    #     if form.is_valid():
-    #         task = form.save()
-    #         return redirect('task-detail', pk=task.pk)
-    #
-    #     return self.get(request)
 
 
 class TransmissionDelete(DeleteView):

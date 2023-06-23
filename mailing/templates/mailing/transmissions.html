@@ -5,16 +5,16 @@
         <thead>
         <tr>
               <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-             <th scope="col">Header</th>
-             <th scope="col">Header</th>
-             <th scope="col">Header</th>
+              <th scope="col">Title</th>
+              <th scope="col">Frequency</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+              <th scope="col">Mailing attempt statistics</th>
+              <th scope="col">Full View</th>
+              <th scope="col">Delete</th>
 
 
-            </tr>
+         </tr>
         </thead>
 
 {% for transmission in Transmissions %}
@@ -25,7 +25,9 @@
         <td>{{transmission.frequency}}</td>
         <td>{{transmission.status}}</td>
         <td>{{transmission.time}}</td>
-        <td>{{transmission.statistic}}</td>
+        {% for statistic in transmission.statistic_of_transmission.all %}
+        <td>{{statistic}}</td>
+        {% endfor %}
         <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Show</a></td>
         <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
 
