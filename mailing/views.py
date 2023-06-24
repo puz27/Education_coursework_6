@@ -147,14 +147,15 @@ class TransmissionCreate(CreateView):
 
         # Executing send message
         schedule_transmission_time = self.object.time
-        today_time = datetime.now()
-        if schedule_transmission_time <= today_time:
+        current_time = datetime.now().time()
+        print(schedule_transmission_time, current_time)
+
+        if schedule_transmission_time <= current_time:
             send_message = self.object.message.get_info()
             print("!SEND MESSAGE!")
             for client in self.object.clients.all():
                 print(client.email)
                 sendmail(client.email, send_message[0], send_message[1])
-                print(sendmail.__dict__)
 
         return super().form_valid(form)
 

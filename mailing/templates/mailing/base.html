@@ -313,19 +313,35 @@
           <hr class="my-3">
 
           <ul class="nav flex-column mb-auto">
+            {% if user.is_authenticated %}
+
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
-                <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
-                Settings
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="#">
+             <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:logout' %}">
                 <svg class="bi"><use xlink:href="#door-closed"/></svg>
                 Sign out
               </a>
             </li>
-          </ul>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:profile' %}">
+                <svg class="bi"><use xlink:href="#people"/></svg>
+                Profile
+              </a>
+            </li>
+            {% else %}
+             <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:login' %}">
+                <svg class="bi"><use xlink:href="#people"/></svg>
+                Sign in
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:registration' %}">
+                <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
+                Registration
+              </a>
+            </li>
+            {% endif%}
+         </ul>
         </div>
       </div>
     </div>

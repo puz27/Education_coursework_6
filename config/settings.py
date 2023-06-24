@@ -37,8 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mailing.apps.MailingConfig'
+    'mailing.apps.MailingConfig',
+    'django_crontab',
+    'users.apps.UsersConfig',
 ]
+
+SITE_ID = 1
+SITE_NAME = "127.0.0.1:8000"
+
+
+CRONJOBS = [
+    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /home/file.log'),
+    ('11 00 * * *', 'mailing.cron.my_scheduled_job')
+    ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -109,11 +121,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -131,13 +143,19 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = 'n.avramenko87@gmail.com'
-EMAIL_HOST_PASSWORD = 'XXXXXXXXXXXXXXXXXXX'
+EMAIL_HOST_PASSWORD = 'grkzxjjwedzarfqh'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 
 DATETIME_FORMAT = "%Y-%m-%d%H:%M"
+ALLOW_PARALLEL_RUNS = True
+
+
+AUTH_USER_MODEL = "users.User"
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
