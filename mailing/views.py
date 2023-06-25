@@ -1,10 +1,11 @@
-from datetime import datetime
-
+# from datetime import datetime
+from datetime import datetime, timezone
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
 from mailing.utils import sendmail
 from mailing.forms import TransmissionForm, Statistic
+import pytz
 
 
 class MainView(ListView):
@@ -143,8 +144,8 @@ class TransmissionCreate(CreateView):
         print(current_transmission)
         print("---------------------------------------------------------")
         self.object = form.save()
+        # Set default data for created transmission
         Statistic.objects.create(transmission_id=self.object.pk)
-
         # Executing send message
         schedule_transmission_time = self.object.time
         current_time = datetime.now().time()
@@ -154,8 +155,17 @@ class TransmissionCreate(CreateView):
             send_message = self.object.message.get_info()
             print("!SEND MESSAGE!")
             for client in self.object.clients.all():
+
                 print(client.email)
+                print(client)
                 sendmail(client.email, send_message[0], send_message[1])
+            current_time = datetime.now(pytz.timezone('Europe/Moscow'))
+            print(current_time)
+            wu = Statistic.objects.get(transmission_id=self.object.pk)
+            wu.status = "FINISHED"
+            wu.mail_answer = "OK"
+            wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
+            wu.save()
 
         return super().form_valid(form)
 

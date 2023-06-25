@@ -45,10 +45,10 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
-
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /home/file.log'),
-    ('11 00 * * *', 'mailing.cron.my_scheduled_job')
+    ('* * * * *', 'mailing.cron.my_scheduled_job'),
+    # ('*/2 * * * *', 'mailing.cron.my_scheduled_job', '>> /home/file.log'),
+    # ('12 00 * * *', 'mailing.cron.my_scheduled_job')
     ]
 
 
@@ -122,10 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
+USE_TZ = False
 
-USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

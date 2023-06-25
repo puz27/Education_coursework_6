@@ -1,8 +1,9 @@
 from mailing.utils import sendmail
 
+
 def my_scheduled_job():
-  print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
-  sendmail("n.avramenko87@yandex.ru", "TEST", "TEST")
+    sendmail("n.avramenko87@yandex.ru", "TEST", "TEST")
+    sendmail("n.avramenko87@gmail.ru", "TEST", "TEST")
 
 
 
