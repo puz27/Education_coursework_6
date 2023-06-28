@@ -24,7 +24,7 @@
         <td>{{transmission.title}}</td>
         <td>{{transmission.frequency}}</td>
         <td>{{transmission.status}}</td>
-        <td>{{transmission.time}}</td>
+        <td>{{transmission.time | date:"H:i:s"}}</td>
         {% for statistic in transmission.statistic_of_transmission.all %}
         <td>{{statistic}}</td>
         {% endfor %}

@@ -1,4 +1,6 @@
 import datetime
+
+import django as django
 from django.db import models
 from mailing.utils import d_slugify
 
@@ -30,7 +32,8 @@ class Transmission(models.Model):
 
     title = models.CharField(max_length=100, verbose_name="transmission name", null=False, blank=False, unique=True)
     # time = models.DateTimeField(verbose_name="start time for sending", default=datetime.datetime(2023, 1, 1))
-    time = models.TimeField(verbose_name="start time for sending", default=datetime.datetime.now().time())
+    # time = models.TimeField(verbose_name="start time for sending", default=datetime.datetime.now().time())
+    time = models.TimeField(verbose_name="start time for sending", default=django.utils.timezone.now)
     frequency = models.CharField(choices=TransmissionFrequency.choices)
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
