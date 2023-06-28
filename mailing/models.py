@@ -1,4 +1,5 @@
 import datetime
+from config import settings
 
 import django as django
 from django.db import models
@@ -39,6 +40,8 @@ class Transmission(models.Model):
     message = models.ForeignKey("Messages", on_delete=models.SET_NULL, null=True, blank=True)
     clients = models.ManyToManyField("Clients")
     slug = models.SlugField(max_length=255, verbose_name="transmission slug", null=False, unique=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    is_published = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Transmission"

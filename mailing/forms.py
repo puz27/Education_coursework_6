@@ -6,7 +6,7 @@ from mailing.models import Transmission, Statistic
 # from django.contrib.admin import widgets
 
 
-class TransmissionForm(forms.ModelForm):
+class TransmissionCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

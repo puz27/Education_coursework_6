@@ -12,7 +12,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(Transmission)
 class TransmissionAdmin(admin.ModelAdmin):
-    list_display = ("title", "time", "frequency", "status")
+    list_display = ("title", "time", "frequency", "status", "is_published")
     list_filter = ("status",)
     filter_horizontal = ["clients"]
     # prepopulated_fields = {"slug": ("full_name",)}

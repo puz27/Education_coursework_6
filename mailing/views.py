@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
 from mailing.utils import sendmail
-from mailing.forms import TransmissionForm, Statistic
+from mailing.forms import TransmissionCreateForm, Statistic
 import pytz
 
 
@@ -107,6 +107,7 @@ class TransmissionCard(DetailView):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmission Full Information"
         current_object = self.get_object()
+        print(current_object.owner)
         context["Transmission"] = current_object
         context["Statistic"] = current_object.get_statistic[0]
         print(current_object.get_statistic[0])
@@ -126,7 +127,7 @@ class TransmissionView(ListView):
 
 class TransmissionCreate(CreateView):
     model = Transmission
-    form_class = TransmissionForm
+    form_class = TransmissionCreateForm
     template_name = "mailing/transmission_create.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -144,6 +145,11 @@ class TransmissionCreate(CreateView):
         print(current_transmission)
         print("---------------------------------------------------------")
         self.object = form.save()
+
+        # save owner of transmission
+        self.object.owner = self.request.user
+        self.object.save()
+
         # Set default data for created transmission
         Statistic.objects.create(transmission_id=self.object.pk)
         # Executing send message
