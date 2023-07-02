@@ -45,11 +45,11 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
-CRONJOBS = [
-    ('* * * * *', 'mailing.cron.my_scheduled_job'),
-    # ('*/2 * * * *', 'mailing.cron.my_scheduled_job', '>> /home/file.log'),
-    # ('12 00 * * *', 'mailing.cron.my_scheduled_job')
-    ]
+# CRONJOBS = [
+#     ('* * * * *', 'mailing.cron.my_scheduled_job'),
+#     # ('*/2 * * * *', 'mailing.cron.my_scheduled_job', '>> /home/file.log'),
+#     # ('12 00 * * *', 'mailing.cron.my_scheduled_job')
+#     ]
 
 
 MIDDLEWARE = [
@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mailing',
         'USER': 'postgres',
-        'PASSWORD': '123456',
+        'PASSWORD': 'postgres',
         }
 }
 

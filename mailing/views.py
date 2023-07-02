@@ -3,9 +3,10 @@ from datetime import datetime, timezone
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
-from mailing.utils import sendmail
+from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic
 import pytz
+from mailing.services import set_cron
 
 
 class MainView(ListView):
@@ -172,6 +173,9 @@ class TransmissionCreate(CreateView):
             wu.mail_answer = "OK"
             wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
             wu.save()
+        else:
+            print("SET CRON")
+            set_cron()
 
         return super().form_valid(form)
 

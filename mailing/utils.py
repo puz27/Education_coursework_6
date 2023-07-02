@@ -1,5 +1,4 @@
-from django.core.mail import send_mail
-from django.conf import settings
+
 from django.template.defaultfilters import slugify as d_slugify
 from django.views.debug import ExceptionReporter
 from django_cron import CronJobBase, Schedule
@@ -19,13 +18,7 @@ def slugify(words: str) -> str:
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
 
 
-def sendmail(to, subject, message):
-    send_mail(subject,
-              message,
-              settings.EMAIL_HOST_USER,
-              [to],
-              fail_silently=True
-            )
+
 
 
 # class MyCronJob(CronJobBase):
