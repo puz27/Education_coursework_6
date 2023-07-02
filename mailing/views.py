@@ -190,4 +190,43 @@ class TransmissionDelete(DeleteView):
         return reverse_lazy('mailing:transmissions')
 
 
+class TransmissionUpdate(UpdateView):
+    """Update product."""
+    model = Transmission
+    fields = ["title", "time", "frequency", "message", "clients", "is_published"]
+    template_name = "mailing/transmission_update.html"
+    slug_url_kwarg = "transmission_slug"
+    # permission_required = ("catalog.view_product")
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Update Transmission"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('mailing:transmissions')
+
+    def form_valid(self, form):
+
+        # check send time
+        schedule_transmission_time_update = form.cleaned_data["time"]
+        current_time = datetime.now().time()
+        print(schedule_transmission_time_update, current_time)
+
+        if schedule_transmission_time_update <= current_time:
+            send_message = self.object.message.get_info()
+            print("!SEND MESSAGE!")
+            for client in self.object.clients.all():
+
+                print(client.email)
+                print(client)
+                sendmail(client.email, send_message[0], send_message[1])
+            current_time = datetime.now(pytz.timezone('Europe/Moscow'))
+            print(current_time)
+            wu = Statistic.objects.get(transmission_id=self.object.pk)
+            wu.status = "FINISHED"
+            wu.mail_answer = "OK"
+            wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
+            wu.save()
+
+        return super().form_valid(form)

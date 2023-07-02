@@ -10,7 +10,9 @@
               <th scope="col">Status</th>
               <th scope="col">Date</th>
               <th scope="col">Mailing attempt statistics</th>
+              <th scope="col">Is Active</th>
               <th scope="col">Full View</th>
+              <th scope="col">Update</th>
               <th scope="col">Delete</th>
 
 
@@ -27,8 +29,14 @@
         <td>{{transmission.time | date:"H:i:s"}}</td>
         {% for statistic in transmission.statistic_of_transmission.all %}
         <td>{{statistic}}</td>
+        {% if transmission.is_published %}
+            <td> Yes </td>
+        {% else %}
+             <td> No </td>
+        {% endif %}
         {% endfor %}
         <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Show</a></td>
+        <td> <a href="{% url 'mailing:transmission_update' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
         <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
 
 
