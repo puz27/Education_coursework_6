@@ -9,8 +9,22 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         GROUPS = ['moderators', ]
-        MODELS = ["Client", "Message", "Transmission", "user"]
+        MODELS = ["Client", "Message", "Transmission", "user", ]
         PERMISSIONS = ['view', ]
+
+        for group in GROUPS:
+            new_group, created = Group.objects.get_or_create(name=group)
+            for model in MODELS:
+                for permission in PERMISSIONS:
+                    name = 'Can {} {}'.format(permission, model)
+                    print("Creating {}".format(name))
+                    model_add_perm = Permission.objects.get(name=name)
+                    new_group.permissions.add(model_add_perm)
+
+
+        GROUPS = ['users', ]
+        MODELS = ["Client", "Message", "Transmission", ]
+        PERMISSIONS = ["add", "change", "delete", "view", ]
 
         for group in GROUPS:
             new_group, created = Group.objects.get_or_create(name=group)
