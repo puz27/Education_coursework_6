@@ -30,7 +30,23 @@ class ClientsView(ListView):
         return context
 
 
-class ClientsCreate(CreateView):
+class ClientCard(DetailView):
+    model = Clients
+    template_name = "mailing/client_card.html"
+    slug_url_kwarg = "client_slug"
+
+    def get_object(self, queryset=None):
+        one_client = super().get_object()
+        return one_client
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Client Full Information"
+        context["Client"] = self.get_object()
+        return context
+
+
+class ClientCreate(CreateView):
     model = Clients
     template_name = "mailing/client_create.html"
     fields = ["full_name", "email", "comment"]
@@ -44,9 +60,29 @@ class ClientsCreate(CreateView):
         return reverse_lazy('mailing:clients')
 
 
-class ClientsDelete(DeleteView):
+class ClientUpdate(UpdateView):
+    """Update client."""
+    model = Clients
+    fields = ["full_name", "comment", "email"]
+    template_name = "mailing/client_update.html"
+    slug_url_kwarg = "client_slug"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Update Client"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('mailing:clients')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
+class ClientDelete(DeleteView):
     model = Clients
     template_name = "mailing/delete.html"
+    slug_url_kwarg = "client_slug"
 
     def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
         context = super().get_context_data(**kwargs)

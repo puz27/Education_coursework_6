@@ -10,6 +10,7 @@ class Clients(models.Model):
     full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False)
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
     email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False)
+    slug = models.SlugField(max_length=255, verbose_name="client slug", null=False, unique=True)
 
     class Meta:
         verbose_name = "Client"
@@ -17,6 +18,11 @@ class Clients(models.Model):
 
     def __str__(self):
         return self.full_name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = d_slugify(self.full_name)
+        super().save(*args, **kwargs)
 
 
 class Transmission(models.Model):
@@ -92,7 +98,6 @@ class Statistic(models.Model):
     time = models.DateTimeField(verbose_name="last time for send", default=None, null=True, blank=True)
     status = models.CharField(choices=AttemptStatus.choices, default=AttemptStatus.Created)
     mail_answer = models.CharField(verbose_name="answer from mailserver", default=None, null=True, blank=True)
-    slug = models.SlugField(max_length=255, verbose_name="statistic slug", null=False, unique=True)
 
     class Meta:
         verbose_name = "Statistic"

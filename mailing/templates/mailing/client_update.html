@@ -1,0 +1,12 @@
+{% extends 'mailing/base.html' %}
+
+{% block body %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <li> Title: {{ form.full_name }} </li>
+    <li> Time: {{ form.comment }} </li>
+    <li> Time: {{ form.email }} </li>
+
+<input type="submit" value="Submit">
+</form>
+{% endblock %}
