@@ -7,6 +7,8 @@
               <th scope="col">#</th>
               <th scope="col">Header</th>
               <th scope="col">Header</th>
+              <th scope="col">View</th>
+              <th scope="col">Delete</th>
         </tr>
         </thead>
 {% for message in Messages %}
@@ -14,7 +16,12 @@
     <tr>
         <td>{{message.pk}}</td>
         <td>{{message.theme}}</td>
-        <td><a href="{% url 'mailing:message_delete' message.pk %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
+        <td><a href="{% url 'mailing:message_card' message.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
+        {% if perms.mailing.change_transmission %}
+        <td><a href="{% url 'mailing:message_update' message.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
+        <td><a href="{% url 'mailing:message_delete' message.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
+        {% endif %}
+
     </tr>
   </tbody>
 {% endfor %}

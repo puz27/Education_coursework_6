@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView as BaseLoginView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetConfirmView, PasswordResetCompleteView
@@ -10,7 +11,7 @@ from django.urls import reverse_lazy
 import config.settings
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
-from mailing.utils import sendmail
+from mailing.services import sendmail
 from django.shortcuts import redirect
 from django.contrib.auth import login
 

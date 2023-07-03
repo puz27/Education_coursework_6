@@ -63,6 +63,7 @@ class Transmission(models.Model):
 class Messages(models.Model):
     theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)
     body = models.TextField(max_length=500, verbose_name="message body", null=False, blank=False)
+    slug = models.SlugField(max_length=255, verbose_name="message slug", null=False, unique=True)
 
     class Meta:
         verbose_name = "Message"
@@ -75,6 +76,11 @@ class Messages(models.Model):
         """Return information for sending to client"""
         return self.theme, self.body
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = d_slugify(self.theme)
+        super().save(*args, **kwargs)
+
 
 class Statistic(models.Model):
 
@@ -86,6 +92,7 @@ class Statistic(models.Model):
     time = models.DateTimeField(verbose_name="last time for send", default=None, null=True, blank=True)
     status = models.CharField(choices=AttemptStatus.choices, default=AttemptStatus.Created)
     mail_answer = models.CharField(verbose_name="answer from mailserver", default=None, null=True, blank=True)
+    slug = models.SlugField(max_length=255, verbose_name="statistic slug", null=False, unique=True)
 
     class Meta:
         verbose_name = "Statistic"

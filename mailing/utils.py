@@ -1,4 +1,3 @@
-
 from django.template.defaultfilters import slugify as d_slugify
 from django.views.debug import ExceptionReporter
 from django_cron import CronJobBase, Schedule

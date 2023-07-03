@@ -1,5 +1,5 @@
-# from datetime import datetime
 from datetime import datetime, timezone
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
@@ -9,7 +9,7 @@ import pytz
 from mailing.services import set_cron
 
 
-class MainView(ListView):
+class MainView(LoginRequiredMixin, ListView):
     model = Messages
     template_name = "mailing/main.html"
 
@@ -68,6 +68,22 @@ class MessagesView(ListView):
         return context
 
 
+class MessageCard(DetailView):
+    model = Messages
+    template_name = "mailing/message_card.html"
+    slug_url_kwarg = "message_slug"
+
+    def get_object(self, queryset=None):
+        one_message = super().get_object()
+        return one_message
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Message Full Information"
+        context["Message"] = self.get_object()
+        return context
+
+
 class MessageCreate(CreateView):
     model = Messages
     template_name = "mailing/message_create.html"
@@ -82,9 +98,29 @@ class MessageCreate(CreateView):
         return reverse_lazy('mailing:messages')
 
 
+class MessageUpdate(UpdateView):
+    """Update message."""
+    model = Messages
+    fields = ["theme", "body"]
+    template_name = "mailing/message_update.html"
+    slug_url_kwarg = "message_slug"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Title"] = "Update Message"
+        return context
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('mailing:messages')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+
 class MessageDelete(DeleteView):
     model = Messages
     template_name = "mailing/delete.html"
+    slug_url_kwarg = "message_slug"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,7 +158,7 @@ class TransmissionView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmissions"
-        context["Transmissions"] = Transmission.objects.all()
+        context["Transmissions"] = Transmission.objects.filter(owner=self.request.user)
         return context
 
 
@@ -175,7 +211,7 @@ class TransmissionCreate(CreateView):
             wu.save()
         else:
             print("SET CRON")
-            set_cron()
+            # set_cron()
 
         return super().form_valid(form)
 
