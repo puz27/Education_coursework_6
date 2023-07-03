@@ -42,7 +42,7 @@ class ClientCard(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Client Full Information"
-        context["Client"] = self.get_object()
+        context["Message"] = self.get_object()
         return context
 
 
