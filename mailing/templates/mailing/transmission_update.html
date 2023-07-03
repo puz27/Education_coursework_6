@@ -3,11 +3,16 @@
 {% block body %}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <li> Title: {{ form.title }} </li>
-    <li> Time: {{ form.time }} </li>
-    <li> Frequency: {{ form.frequency }} </li>
-    <li> Message: {{ form.message }} </li>
-    <li> Clients: {{ form.clients }} </li>
+    {% if perms.mailing.change_transmission %}
+        <li> Title: {{ form.title }} </li>
+        <li> Time: {{ form.time }} </li>
+        <li> Frequency: {{ form.frequency }} </li>
+        <li> Message: {{ form.message }} </li>
+        <li> Clients: {{ form.clients }} </li>
+    {% else %}
+
+
+    {% endif %}
     <li> Active: {{ form.is_published }} </li>
 
 <input type="submit" value="Submit">

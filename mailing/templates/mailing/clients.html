@@ -18,9 +18,10 @@
         <td>{{client.email}}</td>
         <td>{{client.comment}}</td>
         <td><a href="{% url 'mailing:client_card' client.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
+        {% if perms.mailing.change_client %}
         <td><a href="{% url 'mailing:client_update' client.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
         <td><a href="{% url 'mailing:client_delete' client.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
-
+        {% endif%}
     </tr>
   </tbody>
 {% endfor %}

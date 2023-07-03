@@ -39,6 +39,7 @@
             {% endfor %}
             <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Show</a></td>
             <td> <a href="{% url 'mailing:transmission_update' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
+
             {% if perms.mailing.change_transmission %}
             <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
             {% endif%}
