@@ -3,7 +3,7 @@ from config import settings
 
 import django as django
 from django.db import models
-from mailing.utils import d_slugify
+from mailing.utils import convert_word
 
 
 class Clients(models.Model):
@@ -22,7 +22,7 @@ class Clients(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = d_slugify(self.full_name)
+            self.slug = convert_word(self.full_name)
         super().save(*args, **kwargs)
 
 
@@ -56,7 +56,7 @@ class Transmission(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = d_slugify(self.title)
+            self.slug = convert_word(self.title)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -86,7 +86,7 @@ class Messages(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = d_slugify(self.theme)
+            self.slug = convert_word(self.theme)
         super().save(*args, **kwargs)
 
 

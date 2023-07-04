@@ -3,7 +3,7 @@ from django.views.debug import ExceptionReporter
 from django_cron import CronJobBase, Schedule
 
 
-def slugify(words: str) -> str:
+def convert_word(words) -> str:
     """
     Slugify for russian language.
     """
@@ -15,10 +15,6 @@ def slugify(words: str) -> str:
                 'я': 'ya'}
 
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
-
-
-
-
 
 # class MyCronJob(CronJobBase):
 #     RUN_EVERY_MINUTES = 1
