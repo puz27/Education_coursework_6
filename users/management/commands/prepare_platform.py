@@ -2,6 +2,28 @@ from django.core.management import BaseCommand
 from users.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
+import psycopg2
+
+
+def send_query(table: str, args: str) -> None:
+    connection = psycopg2.connect(
+        host="localhost",
+        database="mailing",
+        user="postgres",
+        password="postgres"
+    )
+
+    try:
+        with connection:
+            with connection.cursor() as cursor:
+                query = f"INSERT INTO {table} VALUES {args}"
+                cursor.execute(query)
+                connection.commit()
+                print("Set user roles")
+    except psycopg2.Error:
+        print("Set user roles. Error!")
+    finally:
+        connection.close()
 
 
 class Command(BaseCommand):
@@ -72,13 +94,6 @@ class Command(BaseCommand):
         user.save()
         print("Creating user test.")
 
-
-# with connection.cursor() as cursor:
-#     col_count = "".join("%s," * len(data[0]))
-#     query = f"INSERT INTO {table} VALUES ({col_count[:-1]})"
-#     cursor.executemany(query, data)
-#     connection.commit()
-#     print(f"Операция над таблицей {table} прошла успешно.")
-
-
+        send_query("users_user_groups", "('1', '2', '1')")
+        send_query("users_user_groups", "('2', '3', '2')")
 
