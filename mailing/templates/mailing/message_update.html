@@ -3,9 +3,9 @@
 {% block body %}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <li> Title: {{ form.theme }} </li>
-    <li> Time: {{ form.body }} </li>
+    <p> Theme: {{ form.theme }} </p>
+    <p> Body: </p> {{ form.body }}
 
-<input type="submit" value="Submit">
+    <p><input type="submit" value="Submit"></p>
 </form>
 {% endblock %}

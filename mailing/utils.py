@@ -1,6 +1,4 @@
 from django.template.defaultfilters import slugify as d_slugify
-from django.views.debug import ExceptionReporter
-from django_cron import CronJobBase, Schedule
 
 
 def convert_word(words) -> str:
@@ -15,14 +13,3 @@ def convert_word(words) -> str:
                 'я': 'ya'}
 
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
-
-# class MyCronJob(CronJobBase):
-#     RUN_EVERY_MINUTES = 1
-#     RUN_AT_TIMES = ['23:42']
-#     schedule = Schedule(run_at_times=RUN_AT_TIMES)
-#     code = "mailing.utils.MyCronJob"
-#
-#     def do_work(self):
-#         sendmail("n.avramenko87@yandex.ru", "TEST", "TEST")
-#         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
-#

@@ -1,4 +1,4 @@
-from mailing.utils import sendmail
+from mailing.services import sendmail
 
 
 def my_scheduled_job():
