@@ -6,6 +6,7 @@ from mailing.models import Messages, Clients, Transmission
 from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic
 import pytz
+from blog.models import Blog
 from mailing.services import set_cron
 
 
@@ -16,6 +17,7 @@ class MainView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Main"
+        context["Blog"] = Blog.objects.order_by('?')[:3]
         return context
 
 
