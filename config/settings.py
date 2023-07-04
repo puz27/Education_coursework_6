@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mailing.apps.MailingConfig',
     'django_crontab',
     'users.apps.UsersConfig',
+    'blog.apps.BlogConfig',
 ]
 
 SITE_ID = 1
