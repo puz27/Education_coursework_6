@@ -42,7 +42,7 @@ class ClientCard(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Client Full Information"
-        context["Message"] = self.get_object()
+        context["Client"] = self.get_object()
         return context
 
 
@@ -58,6 +58,13 @@ class ClientCreate(CreateView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('mailing:clients')
+
+    def form_valid(self, form):
+        # save owner of user
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
 
 class ClientUpdate(UpdateView):
@@ -132,6 +139,13 @@ class MessageCreate(CreateView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('mailing:messages')
+
+    def form_valid(self, form):
+        # save owner of message
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
 
 class MessageUpdate(UpdateView):

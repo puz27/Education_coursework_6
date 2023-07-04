@@ -11,6 +11,7 @@ class Clients(models.Model):
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
     email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False)
     slug = models.SlugField(max_length=255, verbose_name="client slug", null=False, unique=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name = "Client"
@@ -69,6 +70,7 @@ class Transmission(models.Model):
 class Messages(models.Model):
     theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)
     body = models.TextField(max_length=500, verbose_name="message body", null=False, blank=False)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(max_length=255, verbose_name="message slug", null=False, unique=True)
 
     class Meta:
