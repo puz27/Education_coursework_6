@@ -17,11 +17,16 @@
         <td>{{client.full_name}}</td>
         <td>{{client.email}}</td>
         <td>{{client.comment}}</td>
+
+        {% if perms.mailing.view_clients %}
         <td><a href="{% url 'mailing:client_card' client.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
-        {% if perms.mailing.change_client %}
+        {% endif %}
+        {% if perms.mailing.change_clients %}
         <td><a href="{% url 'mailing:client_update' client.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
+        {% endif %}
+        {% if perms.mailing.delete_clients %}
         <td><a href="{% url 'mailing:client_delete' client.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
-        {% endif%}
+        {% endif %}
     </tr>
   </tbody>
 {% endfor %}

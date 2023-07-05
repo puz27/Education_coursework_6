@@ -16,9 +16,13 @@
     <tr>
         <td>{{message.pk}}</td>
         <td>{{message.theme}}</td>
+        {% if perms.mailing.view_messages %}
         <td><a href="{% url 'mailing:message_card' message.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
-        {% if perms.mailing.change_transmission %}
+        {% endif %}
+        {% if perms.mailing.change_messages %}
         <td><a href="{% url 'mailing:message_update' message.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
+        {% endif %}
+        {% if perms.mailing.delete_messages %}
         <td><a href="{% url 'mailing:message_delete' message.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
         {% endif %}
 
