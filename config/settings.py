@@ -47,8 +47,8 @@ SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
 CRONJOBS = [
-    ('* * * * *', 'mailing.cron.my_scheduled_job'),
-     ]
+    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /tmp/scheduled_job.log')
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
