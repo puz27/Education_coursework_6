@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
 from mailing.services import sendmail
-from mailing.forms import TransmissionCreateForm, Statistic
+from mailing.forms import TransmissionCreateForm, Statistic, ClientCreateForm, MessageCreateForm
 import pytz
 from blog.models import Blog
 
@@ -62,8 +62,8 @@ class ClientCard(DetailView):
 
 class ClientCreate(CreateView):
     model = Clients
+    form_class = ClientCreateForm
     template_name = "mailing/client_create.html"
-    fields = ["full_name", "email", "comment"]
 
     def get_context_data(self, *, object_list=None, context_object_name=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,7 +151,7 @@ class MessageCard(DetailView):
 class MessageCreate(CreateView):
     model = Messages
     template_name = "mailing/message_create.html"
-    fields = ["theme", "body"]
+    form_class = MessageCreateForm
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
