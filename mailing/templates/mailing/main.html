@@ -1,5 +1,6 @@
 {% extends 'mailing/base.html' %}
 {% block body %}
+    {% if Blog %}
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
       <p class="fs-6 text-body-secondary">Blogs</p>
     </div>
@@ -21,8 +22,15 @@
       </div>
          {% endfor %}
     </div>
+    {% endif %}
+
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
       <p class="fs-6 text-body-secondary">Statistic</p>
     </div>
+    <li> All Transmissions: {{ all_transmissions }} </li>
+    <li> Active Transmissions: {{ active_transmissions }} </li>
+    <li> All Clients: {{ all_clients }} </li>
+    <li> Unique Clients: {{ unique_clients }} </li>
 
 {% endblock %}
+

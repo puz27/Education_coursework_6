@@ -9,7 +9,7 @@ from mailing.utils import convert_word
 class Clients(models.Model):
     full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False)
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
-    email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False)
+    email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False, unique=False)
     slug = models.SlugField(max_length=255, verbose_name="client slug", null=False, unique=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 

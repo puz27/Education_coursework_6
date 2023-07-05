@@ -17,7 +17,13 @@ class MainView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Main"
+        # show blogs
         context["Blog"] = Blog.objects.order_by('?')[:3]
+        # show statistic
+        context["all_transmissions"] = len(Transmission.objects.all())
+        context["active_transmissions"] = len(Transmission.objects.filter(is_published=True))
+        context["all_clients"] = len(Clients.objects.all())
+        context["unique_clients"] = len(Clients.objects.all().values('email').distinct())
         return context
 
 
