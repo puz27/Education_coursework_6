@@ -1,5 +1,13 @@
 {% extends 'mailing/base.html' %}
+{% load mailing_tags %}
 {% block body %}
-{{Blog}}
-{{Blog.views}}
+<div>
+<p>
+{% if Blog.image %}
+    <img src="{% media_path Blog.image %}" width="250" align="left" vspace="5" hspace="10">
+{% endif %}
+{{Blog.plot}}</p>
+</div>
+<br>
+Views counts: {{Blog.views}}
 {% endblock %}

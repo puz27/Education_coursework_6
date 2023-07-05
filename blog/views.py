@@ -11,8 +11,8 @@ class BlogCard(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["Title"] = "Blog Information"
         current_object = self.get_object()
+        context["Title"] = current_object.title
         context["Blog"] = current_object
         current_object.views += 1
         current_object.save()

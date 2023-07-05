@@ -1,9 +1,8 @@
 import datetime
 from config import settings
-
 import django as django
 from django.db import models
-from mailing.utils import convert_word
+from mailing.services import convert_word
 
 
 class Clients(models.Model):

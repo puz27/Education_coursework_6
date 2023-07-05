@@ -7,7 +7,6 @@ from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic
 import pytz
 from blog.models import Blog
-from mailing.services import set_cron
 
 
 class MainView(LoginRequiredMixin, ListView):

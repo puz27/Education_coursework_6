@@ -1,6 +1,5 @@
 from django.db import models
-import datetime
-from mailing.utils import d_slugify
+from mailing.services import convert_word
 
 
 class Blog(models.Model):
@@ -21,5 +20,5 @@ class Blog(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = d_slugify(self.title)
+            self.slug = convert_word(self.title)
         super().save(*args, **kwargs)
