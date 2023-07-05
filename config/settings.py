@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mailing.apps.MailingConfig',
-    'django_crontab',
     'users.apps.UsersConfig',
     'blog.apps.BlogConfig',
 ]
@@ -47,8 +47,8 @@ SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /PycharmProjects/Education_coursework_6/scheduled_job.log')
-    ]
+    ('*/1 * * * *', 'mailing.cron.my_scheduled_job')
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
