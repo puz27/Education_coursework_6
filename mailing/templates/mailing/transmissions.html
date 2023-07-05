@@ -9,11 +9,14 @@
               <th scope="col">Frequency</th>
               <th scope="col">Status</th>
               <th scope="col">Time to Send</th>
-              <th scope="col">Mailing attempt statistics</th>
               <th scope="col">Is Active</th>
+              {% if perms.mailing.view_transmission %}
               <th scope="col">Full View</th>
-              <th scope="col">Update</th>
+              {% endif %}
               {% if perms.mailing.change_transmission %}
+              <th scope="col">Update</th>
+              {% endif %}
+              {% if perms.mailing.delete_transmission %}
               <th scope="col">Delete</th>
               {% endif %}
 
@@ -29,21 +32,21 @@
             <td>{{transmission.frequency}}</td>
             <td>{{transmission.status}}</td>
             <td>{{transmission.time | date:"H:i:s"}}</td>
-            {% for statistic in transmission.statistic_of_transmission.all %}
-            <td>{{statistic}}</td>
+
             {% if transmission.is_published %}
                 <td> Yes </td>
             {% else %}
                  <td> No </td>
             {% endif %}
-            {% endfor %}
-            <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Show</a></td>
-            <td> <a href="{% url 'mailing:transmission_update' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
-
+            {% if perms.mailing.view_transmission %}
+                <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
+            {% endif %}
             {% if perms.mailing.change_transmission %}
-            <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
-            {% endif%}
-
+                <td> <a href="{% url 'mailing:transmission_update' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
+            {% endif %}
+            {% if perms.mailing.delete_transmission %}
+                <td> <a href="{% url 'mailing:transmission_delete' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Delete</a></td>
+            {% endif %}
         </tr>
       </tbody>
  {% endfor %}

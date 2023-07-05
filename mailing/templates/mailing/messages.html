@@ -5,10 +5,16 @@
         <thead>
         <tr>
               <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">View</th>
-              <th scope="col">Delete</th>
+              <th scope="col">Theme</th>
+            {% if perms.mailing.view_transmission %}
+                <th scope="col">View</th>
+            {% endif %}
+            {% if perms.mailing.change_transmission %}
+                <th scope="col">Update</th>
+            {% endif %}
+            {% if perms.mailing.delete_transmission %}
+                <th scope="col">Delete</th>
+            {% endif %}
         </tr>
         </thead>
 {% for message in Messages %}

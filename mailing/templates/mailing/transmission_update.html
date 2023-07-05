@@ -4,17 +4,21 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% if perms.mailing.change_transmission %}
-        <li> Title: {{ form.title }} </li>
-        <li> Time: {{ form.time }} </li>
-        <li> Frequency: {{ form.frequency }} </li>
-        <li> Message: {{ form.message }} </li>
-        <li> Clients: {{ form.clients }} </li>
+    <p>Title: {{ form.title }}</p>
+    <p>Time: {{ form.time }}</p>
+    <p>Frequency: {{ form.frequency }}</p>
+    <p>essage: {{ form.message }}</p>
+    <p>Clients: {{ form.clients }}</p>
     {% else %}
-
-
+         {{ form.title.as_hidden }}
+         {{ form.time.as_hidden }}
+         {{ form.frequency.as_hidden }}
+         {{ form.message.as_hidden }}
+         {{ form.clients.as_hidden }}
     {% endif %}
-    <li> Active: {{ form.is_published }} </li>
 
+     Active: {{ form.is_published }}
+<br>
 <input type="submit" value="Submit">
 </form>
 {% endblock %}

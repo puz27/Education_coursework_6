@@ -47,7 +47,7 @@ SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /tmp/scheduled_job.log')
+    ('*/1 * * * *', 'mailing.cron.my_scheduled_job', '>> /PycharmProjects/Education_coursework_6/scheduled_job.log')
     ]
 
 MIDDLEWARE = [
