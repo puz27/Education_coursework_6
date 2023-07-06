@@ -293,8 +293,14 @@
                 Add New Transmission
               </a>
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mailing:run_scheduler' %}">
+                <svg class="bi"><use xlink:href="#puzzle"/></svg>
+                Run Scheduler
+              </a>
+            </li>
           </ul>
-         <hr class="my-3">
 
           <ul class="nav flex-column mb-auto">
             {% if user.is_authenticated %}
@@ -336,9 +342,13 @@
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
       </div>
+
+
       {% block body %}
 
       {% endblock %}
+
+
       <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
       <h2>Section title</h2>

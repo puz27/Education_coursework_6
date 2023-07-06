@@ -1,12 +1,16 @@
 from django.urls import path
+
 from mailing.views import MessagesView, ClientsView, MainView, MessageCreate, TransmissionCreate, \
     TransmissionView, TransmissionDelete, MessageDelete, TransmissionCard, TransmissionUpdate, \
     MessageCard, MessageUpdate, ClientDelete, ClientCard, ClientCreate, ClientUpdate
+from mailing.services import run_schedule
 
 app_name = "mailing"
 
 
 urlpatterns = [
+    path("run_scheduler/", run_schedule, name="run_scheduler"),
+
     path("", MainView.as_view(), name="main_page"),
 
     path("messages/", MessagesView.as_view(), name="messages"),
