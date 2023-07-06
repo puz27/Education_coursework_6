@@ -1,4 +1,3 @@
-from crontab import CronTab
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.defaultfilters import slugify as d_slugify
@@ -25,10 +24,3 @@ def sendmail(to, subject, message):
               [to],
               fail_silently=True
             )
-
-
-def set_cron():
-    with CronTab(user=True) as cron:
-        job = cron.new(command='echo hello_world')
-        job.minute.every(1)
-    print('cron.write() was just executed')
