@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'mailing.apps.MailingConfig',
     'users.apps.UsersConfig',
     'blog.apps.BlogConfig',
-    'django_crontab',
+
     # 'django_cron',
     # 'crontab'
 ]

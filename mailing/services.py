@@ -31,47 +31,61 @@ def sendmail(to, subject, message):
             )
 
 
-def sendmail_after():
+def sendmail_after(emails_base, message_theme, message_body):
+    for mail in emails_base:
+        print("SENDING TO:", mail)
+        sendmail(mail, message_theme, message_body)
+
+
+def sendmail_after2():
     print("sadasdas")
     # sendmail("n.avramenko87@yandex.ru", "TEST", "TEST")
     # sendmail("n.avramenko87@gmail.com", "TEST_TODAY", "TEST")
     # sendmail("anv@woori.ru", "TEST_TODAY", "TEST")
-    active_transmissions = mailing.models.Transmission.objects.filter(is_published=True)
-    for transmission in active_transmissions:
-        print(transmission)
-        print(transmission.time)
-        print(transmission.frequency)
+    print("DO2 daily")
 
 
 def run_schedule(request):
     if request.method == "GET":
         print("I'm working...")
+        schedule.clear()
 
         active_transmissions = mailing.models.Transmission.objects.filter(is_published=True)
+        print("PREPARE SEND")
         for transmission in active_transmissions:
-            print(transmission)
-
+            emails_base = []
+            print("TRANSMISSION TITLE:", transmission.title)
             if transmission.frequency == "DAILY":
-                print(transmission.time)
-                print(transmission.frequency)
-                schedule.every().day.at(transmission.time).do(sendmail_after)
+                print("TYPE: SEND DAILY")
+                convert_time = str(transmission.time)[:5]
+                print("TIME:", convert_time)
+                message = transmission.get_messages()
+                print("MESSAGE THEME:", message.theme)
+                print("MESSAGE BODY:", message.body)
+                for client_mail in transmission.get_clients():
+                    print("EMAIL:", client_mail.email)
+                    emails_base.append(client_mail.email)
+                    print(emails_base)
+                    schedule.every().day.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body)
 
             if transmission.frequency == "WEEKLY":
                 print(transmission.time)
                 print(transmission.frequency)
 
-                schedule.every().monday.do(sendmail_after)
+                #schedule.every().monday.do(sendmail_after)
 
             if transmission.frequency == "MONTHLY":
                 print(transmission.time)
                 print(transmission.frequency)
 
-                schedule.every(2).seconds.do(sendmail_after)
+                schedule.every(10).seconds.do(sendmail_after)
 
             print("----------------------------------------------------")
+            print(schedule.get_jobs())
 
 
         while True:
             schedule.run_pending()
-            time.sleep(30)
+            time.sleep(1)
+
     return render(request, "mailing/run_scheduler.html")

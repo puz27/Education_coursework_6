@@ -65,6 +65,14 @@ class Transmission(models.Model):
     def get_statistic(self):
         return self.statistic_of_transmission.all()
 
+    def get_messages(self):
+        messages = self.message
+        return messages
+
+    def get_clients(self):
+        clients = self.clients.all()
+        return clients
+
 
 class Messages(models.Model):
     theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)
