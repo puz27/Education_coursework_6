@@ -31,7 +31,7 @@ def sendmail(to, subject, message):
             )
 
 
-def my_scheduled_job():
+def sendmail_after():
     print("sadasdas")
     # sendmail("n.avramenko87@yandex.ru", "TEST", "TEST")
     # sendmail("n.avramenko87@gmail.com", "TEST_TODAY", "TEST")
@@ -46,9 +46,32 @@ def my_scheduled_job():
 def run_schedule(request):
     if request.method == "GET":
         print("I'm working...")
-        # schedule.every(1).minutes.do(my_scheduled_job)
-        schedule.every(2).seconds.do(my_scheduled_job, name='Alice')
+
+        active_transmissions = mailing.models.Transmission.objects.filter(is_published=True)
+        for transmission in active_transmissions:
+            print(transmission)
+
+            if transmission.frequency == "DAILY":
+                print(transmission.time)
+                print(transmission.frequency)
+                schedule.every().day.at(transmission.time).do(sendmail_after)
+
+            if transmission.frequency == "WEEKLY":
+                print(transmission.time)
+                print(transmission.frequency)
+
+                schedule.every().monday.do(sendmail_after)
+
+            if transmission.frequency == "MONTHLY":
+                print(transmission.time)
+                print(transmission.frequency)
+
+                schedule.every(2).seconds.do(sendmail_after)
+
+            print("----------------------------------------------------")
+
+
         while True:
             schedule.run_pending()
-            time.sleep(10)
+            time.sleep(30)
     return render(request, "mailing/run_scheduler.html")
