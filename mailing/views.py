@@ -7,6 +7,7 @@ from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic, ClientCreateForm, MessageCreateForm
 import pytz
 from blog.models import Blog
+from mailing.cron import daily_task
 
 
 class MainView(LoginRequiredMixin, ListView):
@@ -74,6 +75,7 @@ class ClientCreate(CreateView):
         return reverse_lazy('mailing:clients')
 
     def form_valid(self, form):
+        daily_task()
         # save owner of user
         self.object = form.save()
         self.object.owner = self.request.user

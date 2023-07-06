@@ -47,7 +47,8 @@ SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.cron.my_scheduled_job')
+    ('*/1 * * * *', 'mailing.cron.my_scheduled_job'),
+    ('*/2 * * * *', 'mailing.cron.my_scheduled_job',     '>> %s/log.log' % os.path.join(BASE_DIR, 'logs')),
 ]
 
 MIDDLEWARE = [
