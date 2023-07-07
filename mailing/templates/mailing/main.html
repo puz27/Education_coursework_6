@@ -16,7 +16,7 @@
             <div class="card-body">
              <ul class="list-unstyled mt-3 mb-4">
                {% if item.image%}
-                    <li><img src="{% media_path item.image %}" width="150""></li>
+                    <li><img src="{% media_path item.image %}" width="150"></li>
                {% endif %}
               </ul>
                 <a href="{% url 'blog:blog_card' item.slug %}" class="btn btn-sm btn-outline-secondary">View</a>
@@ -25,6 +25,10 @@
       </div>
          {% endfor %}
     </div>
+    {% else %}
+     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <p class="fs-6 text-body-secondary">There are no blogs today. You can add it in admin panel</p>
+          </div>
     {% endif %}
 
     <div class="pricing-header p-3 pb-md-4 mx-auto text-center">

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -266,8 +266,6 @@ class TransmissionCreate(CreateView):
 
         # Create default data statistic
         current_transmission = self.object
-        print(current_transmission)
-        print("---------------------------------------------------------")
         self.object = form.save()
 
         # save owner of transmission
@@ -283,22 +281,20 @@ class TransmissionCreate(CreateView):
 
         if schedule_transmission_time <= current_time:
             send_message = self.object.message.get_info()
-            print("!SEND MESSAGE!")
+            print("!SEND MESSAGE NOW!")
             for client in self.object.clients.all():
-
-                print(client.email)
                 print(client)
                 sendmail(client.email, send_message[0], send_message[1])
-            current_time = datetime.now(pytz.timezone('Europe/Moscow'))
-            print(current_time)
-            wu = Statistic.objects.get(transmission_id=self.object.pk)
-            wu.status = "FINISHED"
-            wu.mail_answer = "OK"
-            wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
-            wu.save()
-        else:
-            print("SET CRON")
-            # set_cron()
+            # current_time = datetime.now(pytz.timezone('Europe/Moscow'))
+            statistic = Statistic.objects.get(transmission_id=self.object.pk)
+            statistic.status = "FINISHED"
+            statistic.mail_answer = "OK"
+            statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
+            statistic.save()
+
+            self.object.status = "FINISHED"
+            self.object.save()
+
 
         return super().form_valid(form)
 

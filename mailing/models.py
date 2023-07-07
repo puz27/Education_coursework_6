@@ -1,12 +1,13 @@
-import datetime
+from datetime import datetime
 from config import settings
 import django as django
 from django.db import models
 from mailing.services import convert_word
+import pytz
 
 
 class Clients(models.Model):
-    full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False)
+    full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False, unique=True)
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
     email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False, unique=False)
     slug = models.SlugField(max_length=255, verbose_name="client slug", null=False, unique=True)
@@ -17,7 +18,7 @@ class Clients(models.Model):
         verbose_name_plural = "Clients"
 
     def __str__(self):
-        return self.full_name
+        return self.email
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -30,7 +31,7 @@ class Transmission(models.Model):
     class TransmissionStatus(models.TextChoices):
         Finished = 'FINISHED'
         Created = 'CREATED'
-        Running = 'RUNNING'
+        Running = 'READY'
 
     class TransmissionFrequency(models.TextChoices):
         Daily = 'DAILY'
@@ -38,8 +39,6 @@ class Transmission(models.Model):
         Monthly = 'MONTHLY'
 
     title = models.CharField(max_length=100, verbose_name="transmission name", null=False, blank=False, unique=True)
-    # time = models.DateTimeField(verbose_name="start time for sending", default=datetime.datetime(2023, 1, 1))
-    # time = models.TimeField(verbose_name="start time for sending", default=datetime.datetime.now().time())
     time = models.TimeField(verbose_name="start time for sending", default=django.utils.timezone.now)
     frequency = models.CharField(choices=TransmissionFrequency.choices)
     status = models.CharField(choices=TransmissionStatus.choices, default=TransmissionStatus.Created)
@@ -75,7 +74,7 @@ class Transmission(models.Model):
 
 
 class Messages(models.Model):
-    theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False)
+    theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False, unique=True)
     body = models.TextField(max_length=500, verbose_name="message body", null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(max_length=255, verbose_name="message slug", null=False, unique=True)
@@ -85,7 +84,7 @@ class Messages(models.Model):
         verbose_name_plural = "Messages"
 
     def __str__(self):
-        return f"{self.theme, self.body}"
+        return self.theme
 
     def get_info(self):
         """Return information for sending to client"""
@@ -114,3 +113,5 @@ class Statistic(models.Model):
 
     def __str__(self):
         return f"Status: {self.status} Time: {self.time} Mail answer: {self.mail_answer}"
+
+

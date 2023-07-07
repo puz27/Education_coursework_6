@@ -5,6 +5,7 @@
     <thead>
         <tr>
               <th scope="col">#</th>
+              <th scope="col">Client Name</th>
               <th scope="col">Mail Address</th>
               <th scope="col">Comment</th>
             {% if perms.mailing.view_transmission %}
@@ -21,6 +22,7 @@
 {% for client in Clients %}
   <tbody>
     <tr>
+        <td>{{client.pk}}</td>
         <td>{{client.full_name}}</td>
         <td>{{client.email}}</td>
         <td>{{client.comment}}</td>
