@@ -100,10 +100,17 @@ def run_schedule(request):
                         schedule.every().saturday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body)
 
             if transmission.frequency == "MONTHLY":
-                print(transmission.time)
-                print(transmission.frequency)
-
-                schedule.every(10).seconds.do(sendmail_after)
+                print("TYPE: SEND DAILY")
+                convert_time = str(transmission.time)[:5]
+                print("TIME:", convert_time)
+                message = transmission.get_messages()
+                print("MESSAGE THEME:", message.theme)
+                print("MESSAGE BODY:", message.body)
+                for client_mail in transmission.get_clients():
+                    print("EMAIL:", client_mail.email)
+                    emails_base.append(client_mail.email)
+                    print(emails_base)
+                    schedule.every(4).weeks.do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body)
 
             print("----------------------------------------------------")
             print(schedule.get_jobs())
