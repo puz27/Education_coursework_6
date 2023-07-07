@@ -260,7 +260,8 @@ class TransmissionCreate(CreateView):
         return context
 
     def get_success_url(self, **kwargs):
-        return reverse_lazy('mailing:transmissions')
+
+       return reverse_lazy('mailing:transmissions')
 
     def form_valid(self, form):
 
@@ -294,7 +295,6 @@ class TransmissionCreate(CreateView):
 
             self.object.status = "FINISHED"
             self.object.save()
-
 
         return super().form_valid(form)
 
