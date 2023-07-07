@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from mailing.models import Messages, Clients, Transmission
@@ -7,10 +7,10 @@ from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic, ClientCreateForm, MessageCreateForm
 import pytz
 from blog.models import Blog
-import schedule
 
 
 class MainView(LoginRequiredMixin, ListView):
+    """Main page with blog and statistic"""
     model = Messages
     template_name = "mailing/main.html"
 
@@ -28,12 +28,12 @@ class MainView(LoginRequiredMixin, ListView):
 
 
 class ClientsView(ListView):
+    """Show all clients for owner / moderator / admin"""
     model = Clients
     template_name = "mailing/clients.html"
 
     def get_queryset(self):
         queryset = super().get_queryset().all()
-
         if not self.request.user.is_staff:
             queryset = super().get_queryset().filter(owner=self.request.user)
         return queryset
@@ -46,6 +46,7 @@ class ClientsView(ListView):
 
 
 class ClientCard(DetailView):
+    """Show all information about client"""
     model = Clients
     template_name = "mailing/client_card.html"
     slug_url_kwarg = "client_slug"
@@ -62,6 +63,7 @@ class ClientCard(DetailView):
 
 
 class ClientCreate(CreateView):
+    """ Create user """
     model = Clients
     form_class = ClientCreateForm
     template_name = "mailing/client_create.html"
@@ -75,13 +77,6 @@ class ClientCreate(CreateView):
         return reverse_lazy('mailing:clients')
 
     def form_valid(self, form):
-        def job():
-            print("I'm working...")
-
-        schedule.every(1).minutes.do(job)
-        schedule.run_pending()
-
-
         # save owner of user
         self.object = form.save()
         self.object.owner = self.request.user
@@ -123,6 +118,7 @@ class ClientDelete(DeleteView):
 
 
 class MessagesView(ListView):
+    """Show all message for owner / moderator / admin"""
     model = Messages
     template_name = "mailing/messages.html"
 
@@ -141,6 +137,7 @@ class MessagesView(ListView):
 
 
 class MessageCard(DetailView):
+    """Show all information about message"""
     model = Messages
     template_name = "mailing/message_card.html"
     slug_url_kwarg = "message_slug"
@@ -157,6 +154,7 @@ class MessageCard(DetailView):
 
 
 class MessageCreate(CreateView):
+    """Create message"""
     model = Messages
     template_name = "mailing/message_create.html"
     form_class = MessageCreateForm
@@ -178,7 +176,7 @@ class MessageCreate(CreateView):
 
 
 class MessageUpdate(UpdateView):
-    """Update message."""
+    """Update message"""
     model = Messages
     fields = ["theme", "body"]
     template_name = "mailing/message_update.html"
@@ -197,6 +195,7 @@ class MessageUpdate(UpdateView):
 
 
 class MessageDelete(DeleteView):
+    """Delete message"""
     model = Messages
     template_name = "mailing/delete.html"
     slug_url_kwarg = "message_slug"
@@ -211,6 +210,7 @@ class MessageDelete(DeleteView):
 
 
 class TransmissionCard(DetailView):
+    """Show all information about transmission"""
     model = Transmission
     template_name = "mailing/transmission_card.html"
     slug_url_kwarg = "transmission_slug"
@@ -223,20 +223,18 @@ class TransmissionCard(DetailView):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmission Full Information"
         current_object = self.get_object()
-        print(current_object.owner)
         context["Transmission"] = current_object
-        context["Statistic"] = current_object.get_statistic[0]
-        print(current_object.get_statistic[0])
+        context["Statistic"] = current_object.get_statistic()
         return context
 
 
 class TransmissionView(ListView):
+    """Show all transmissions for owner / moderator / admin"""
     model = Transmission
     template_name = "mailing/transmissions.html"
 
     def get_queryset(self):
         queryset = super().get_queryset().all()
-
         if not self.request.user.is_staff:
             queryset = super().get_queryset().filter(owner=self.request.user)
         return queryset
@@ -244,12 +242,12 @@ class TransmissionView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Transmissions"
-        # context["Transmissions"] = Transmission.objects.filter(owner=self.request.user)
         context["Transmissions"] = self.get_queryset()
         return context
 
 
 class TransmissionCreate(CreateView):
+    """ Create transmission """
     model = Transmission
     form_class = TransmissionCreateForm
     template_name = "mailing/transmission_create.html"
@@ -260,12 +258,11 @@ class TransmissionCreate(CreateView):
         return context
 
     def get_success_url(self, **kwargs):
-
-       return reverse_lazy('mailing:transmissions')
+        return reverse_lazy('mailing:transmissions')
 
     def form_valid(self, form):
 
-        # Create default data statistic
+        # Create default statistic for transmission
         current_transmission = self.object
         self.object = form.save()
 
@@ -278,7 +275,6 @@ class TransmissionCreate(CreateView):
         # Executing send message
         schedule_transmission_time = self.object.time
         current_time = datetime.now().time()
-        print(schedule_transmission_time, current_time)
 
         if schedule_transmission_time <= current_time:
             send_message = self.object.message.get_info()
@@ -286,13 +282,12 @@ class TransmissionCreate(CreateView):
             for client in self.object.clients.all():
                 print(client)
                 sendmail(client.email, send_message[0], send_message[1])
-            # current_time = datetime.now(pytz.timezone('Europe/Moscow'))
+            # Work with statistic
             statistic = Statistic.objects.get(transmission_id=self.object.pk)
             statistic.status = "FINISHED"
             statistic.mail_answer = "OK"
             statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
             statistic.save()
-
             self.object.status = "FINISHED"
             self.object.save()
 
@@ -300,6 +295,7 @@ class TransmissionCreate(CreateView):
 
 
 class TransmissionDelete(DeleteView):
+    """Delete transmission"""
     model = Transmission
     template_name = "mailing/delete.html"
     slug_url_kwarg = "transmission_slug"
@@ -314,12 +310,11 @@ class TransmissionDelete(DeleteView):
 
 
 class TransmissionUpdate(UpdateView):
-    """Update product."""
+    """Update transmission"""
     model = Transmission
     fields = ["title", "time", "frequency", "message", "clients", "is_published"]
     template_name = "mailing/transmission_update.html"
     slug_url_kwarg = "transmission_slug"
-    # permission_required = ("catalog.view_product")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -330,26 +325,21 @@ class TransmissionUpdate(UpdateView):
         return reverse_lazy('mailing:transmissions')
 
     def form_valid(self, form):
-
         # check send time
         schedule_transmission_time_update = form.cleaned_data["time"]
         current_time = datetime.now().time()
-        print(schedule_transmission_time_update, current_time)
 
         if schedule_transmission_time_update <= current_time:
             send_message = self.object.message.get_info()
             print("!SEND MESSAGE!")
             for client in self.object.clients.all():
-
-                print(client.email)
                 print(client)
                 sendmail(client.email, send_message[0], send_message[1])
-            current_time = datetime.now(pytz.timezone('Europe/Moscow'))
-            print(current_time)
-            wu = Statistic.objects.get(transmission_id=self.object.pk)
-            wu.status = "FINISHED"
-            wu.mail_answer = "OK"
-            wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
-            wu.save()
+            # Work with statistic
+            statistic = Statistic.objects.get(transmission_id=self.object.pk)
+            statistic.status = "FINISHED"
+            statistic.mail_answer = "OK"
+            statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
+            statistic.save()
 
         return super().form_valid(form)

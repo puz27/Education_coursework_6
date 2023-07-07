@@ -14,7 +14,8 @@
 <li>{{ client }}</li>
 {%  endfor %}
 <br>
-<h5>Statistics:</h5>
-<p>{{ Statistic }} </p>
-
+<h5>Last Statistics:</h5>
+{% for i in Statistic %}
+<p>{{ i }} </p>
+{% endfor%}
 {% endblock %}

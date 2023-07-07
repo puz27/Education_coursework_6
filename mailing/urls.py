@@ -11,7 +11,7 @@ app_name = "mailing"
 urlpatterns = [
     path("run_scheduler/", run_schedule, name="run_scheduler"),
 
-    path("", cache_page(60)(MainView.as_view()), name="main_page"),
+    path("", MainView.as_view(), name="main_page"),
 
     path("messages/", MessagesView.as_view(), name="messages"),
     path("message_create/", MessageCreate.as_view(), name="message_create"),

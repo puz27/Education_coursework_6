@@ -1,9 +1,7 @@
-from datetime import datetime
 from config import settings
 import django as django
 from django.db import models
 from mailing.services import convert_word
-import pytz
 
 
 class Clients(models.Model):
@@ -18,9 +16,11 @@ class Clients(models.Model):
         verbose_name_plural = "Clients"
 
     def __str__(self):
+        """Return client mail for fast sending"""
         return self.email
 
     def save(self, *args, **kwargs):
+        """Save slug to clients base"""
         if not self.slug:
             self.slug = convert_word(self.full_name)
         super().save(*args, **kwargs)
@@ -53,6 +53,7 @@ class Transmission(models.Model):
         verbose_name_plural = "Transmission Templates"
 
     def save(self, *args, **kwargs):
+        """Save slug to transmission base"""
         if not self.slug:
             self.slug = convert_word(self.title)
         super().save(*args, **kwargs)
@@ -60,15 +61,17 @@ class Transmission(models.Model):
     def __str__(self):
         return f"Transmission: {self.title}"
 
-    @property
     def get_statistic(self):
+        """Get statistic of send. Use Related name in Statistic"""
         return self.statistic_of_transmission.all()
 
     def get_messages(self):
+        """Get message for transmission when used scheduler"""
         messages = self.message
         return messages
 
     def get_clients(self):
+        """Get clients for transmission when used scheduler"""
         clients = self.clients.all()
         return clients
 
@@ -87,10 +90,11 @@ class Messages(models.Model):
         return self.theme
 
     def get_info(self):
-        """Return information for sending to client"""
+        """Return information about message for fast sending"""
         return self.theme, self.body
 
     def save(self, *args, **kwargs):
+        """Save slug to message base"""
         if not self.slug:
             self.slug = convert_word(self.theme)
         super().save(*args, **kwargs)
@@ -113,5 +117,3 @@ class Statistic(models.Model):
 
     def __str__(self):
         return f"Status: {self.status} Time: {self.time} Mail answer: {self.mail_answer}"
-
-

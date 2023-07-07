@@ -1,9 +1,5 @@
 from django import forms
 from mailing.models import Transmission, Statistic, Clients, Messages
-# from django.forms import SelectDateWidget
-#
-# from mailing.models import Transmission, Messages, Clients
-# from django.contrib.admin import widgets
 
 
 class StyleFormMixin:

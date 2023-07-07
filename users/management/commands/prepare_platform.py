@@ -5,12 +5,13 @@ from django.contrib.auth.models import Permission
 import psycopg2
 
 
-def send_query(table: str, args: str) -> None:
+def send_query(table, args):
+    """Query to base to set roles"""
     connection = psycopg2.connect(
         host="localhost",
         database="mailing",
         user="postgres",
-        password="postgres"
+        password="123456"
     )
 
     try:
@@ -27,9 +28,11 @@ def send_query(table: str, args: str) -> None:
 
 
 class Command(BaseCommand):
+    """Create user and groups"""
 
     def handle(self, *args, **options):
 
+        # create moderators group
         GROUPS = ['moderators', ]
         MODELS = ["Client", "Message", "Transmission", "user", ]
         PERMISSIONS = ['view', ]
@@ -43,7 +46,7 @@ class Command(BaseCommand):
                     model_add_perm = Permission.objects.get(name=name)
                     new_group.permissions.add(model_add_perm)
 
-
+        # create users group
         GROUPS = ['users', ]
         MODELS = ["Client", "Message", "Transmission", ]
         PERMISSIONS = ["add", "change", "delete", "view", ]
@@ -57,6 +60,7 @@ class Command(BaseCommand):
                     model_add_perm = Permission.objects.get(name=name)
                     new_group.permissions.add(model_add_perm)
 
+        # create administrator
         user = User.objects.create(
             email="admin@gmail.com",
             first_name="admin",
@@ -70,6 +74,7 @@ class Command(BaseCommand):
         user.save()
         print("Creating user admin.")
 
+        # create user with moderator role
         user = User.objects.create(
             email="moderator@gmail.com",
             first_name="moderator",
@@ -82,6 +87,7 @@ class Command(BaseCommand):
         user.save()
         print("Creating user moderator.")
 
+        # create test user with role of users
         user = User.objects.create(
             email="test@gmail.com",
             first_name="test",
