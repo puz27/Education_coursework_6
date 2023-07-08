@@ -5,6 +5,7 @@ from mailing.services import convert_word
 
 
 class Clients(models.Model):
+    """Model of client for sending"""
     full_name = models.CharField(max_length=100, verbose_name="client name", null=False, blank=False, unique=True)
     comment = models.TextField(max_length=500, null=True, blank=True, verbose_name="comment about client")
     email = models.EmailField(max_length=255,  verbose_name="client mail", null=False, blank=False, unique=False)
@@ -27,6 +28,7 @@ class Clients(models.Model):
 
 
 class Transmission(models.Model):
+    """Model transmission for sending"""
 
     class TransmissionStatus(models.TextChoices):
         Finished = 'FINISHED'
@@ -77,6 +79,7 @@ class Transmission(models.Model):
 
 
 class Messages(models.Model):
+    """Model message for clients for sending"""
     theme = models.CharField(max_length=50, verbose_name="message theme", null=False, blank=False, unique=True)
     body = models.TextField(max_length=500, verbose_name="message body", null=False, blank=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
@@ -101,6 +104,7 @@ class Messages(models.Model):
 
 
 class Statistic(models.Model):
+    """Model for statistic of transmissions"""
 
     class AttemptStatus(models.TextChoices):
         Finished = 'FINISHED'

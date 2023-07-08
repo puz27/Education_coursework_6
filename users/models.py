@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    """Model for user"""
     username = None
 
     email = models.EmailField(unique=True, verbose_name="user Email")
@@ -12,4 +13,3 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-

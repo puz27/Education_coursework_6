@@ -3,6 +3,7 @@ from mailing.services import convert_word
 
 
 class Blog(models.Model):
+    """Model for blog"""
     title = models.CharField(max_length=100, verbose_name="blog title", null=False, blank=False, unique=True)
     plot = models.TextField(max_length=500, null=False, blank=False, verbose_name="blog description")
     image = models.ImageField(upload_to="images", null=True, blank=True)

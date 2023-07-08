@@ -11,6 +11,7 @@ class StyleFormMixin:
 
 
 class TransmissionCreateForm(StyleFormMixin, forms.ModelForm):
+    """Form for create transmission"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,6 +23,7 @@ class TransmissionCreateForm(StyleFormMixin, forms.ModelForm):
 
 
 class ClientCreateForm(StyleFormMixin, forms.ModelForm):
+    """Form for create client"""
 
     class Meta:
         model = Clients
@@ -29,6 +31,7 @@ class ClientCreateForm(StyleFormMixin, forms.ModelForm):
 
 
 class MessageCreateForm(StyleFormMixin, forms.ModelForm):
+    """Form  for create message for client"""
 
     class Meta:
         model = Messages
@@ -36,6 +39,7 @@ class MessageCreateForm(StyleFormMixin, forms.ModelForm):
 
 
 class StatisticForm(forms.ModelForm):
+    """Show statistic of transmission"""
 
     class Meta:
         model = Statistic

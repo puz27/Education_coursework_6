@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView as BaseLoginView, PasswordResetView, PasswordResetDoneView, \
     PasswordResetConfirmView, PasswordResetCompleteView
@@ -17,7 +16,7 @@ from django.contrib.auth import login
 
 
 class TitleMixin(object):
-    """Mixin for show title on pages."""
+    """Mixin for show title on pages"""
     title = None
 
     def get_title(self):
@@ -30,18 +29,18 @@ class TitleMixin(object):
 
 
 class LoginView(TitleMixin, BaseLoginView):
-    """ Login to site."""
+    """Login to site"""
     template_name = "users/login.html"
     title = "Login"
 
 
 class LogoutView(BaseLogoutView):
-    """Logout from site."""
+    """Logout from site"""
     template_name = "users/login.html"
 
 
 class RegisterView(TitleMixin, CreateView):
-    """ Register new user and send verification mail on user email."""
+    """Register new user and send verification mail on user email"""
     form_class = UserRegisterForm
     template_name = "users/registration/registration_form.html"
     success_url = reverse_lazy('users:registration_reset')
@@ -64,12 +63,12 @@ class RegisterView(TitleMixin, CreateView):
 
 
 class UserConfirmationSentView(PasswordResetDoneView):
-    """Success first part of registration."""
+    """Success first part of registration"""
     template_name = "users/registration/registration_sent_done.html"
 
 
 class UserConfirmEmailView(View):
-    """User confirms his registration."""
+    """User confirms his registration"""
     def get(self, request, uidb64, token):
         try:
             uid = urlsafe_base64_decode(uidb64)
@@ -87,13 +86,13 @@ class UserConfirmEmailView(View):
 
 
 class UserConfirmedView(TitleMixin, TemplateView):
-    """User registration done and show information about it."""
+    """User registration done and show information about it"""
     template_name = 'users/registration/registration_confirmed.html'
     title = "Your email is activated."
 
 
 class UserUpdateView(UpdateView):
-    """User profile."""
+    """User profile"""
     model = User
     success_url = reverse_lazy("users:profile")
     form_class = UserProfileForm
@@ -104,23 +103,23 @@ class UserUpdateView(UpdateView):
 
 
 class UserResetView(PasswordResetView):
-    """First step for reset user password."""
+    """First step for reset user password"""
     template_name = "users/registration/password_reset_form.html"
     email_template_name = "users/registration/password_reset_email.html"
     success_url = reverse_lazy('users:password_reset_done')
 
 
 class UserResetDoneView(PasswordResetDoneView):
-    """Second step for reset user password."""
+    """Second step for reset user password"""
     template_name = "users/registration/password_reset_done.html"
 
 
 class UserResetConfirmView(PasswordResetConfirmView):
-    """User confirm reset and changed password."""
+    """User confirm reset and changed password"""
     template_name = "users/registration/password_reset_confirm.html"
     success_url = reverse_lazy("users:password_reset_complete")
 
 
 class UserResetCompleteView(PasswordResetCompleteView):
-    """Reset done information."""
+    """Reset done information"""
     template_name = "users/registration/password_reset_complete.html"

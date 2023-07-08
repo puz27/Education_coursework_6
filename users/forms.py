@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from users.models import User
 from django import forms
 
@@ -11,6 +11,7 @@ class StyleFormMixin:
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
+    """Form for registration user on site"""
 
     class Meta:
         model = User
@@ -18,6 +19,7 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 
 
 class UserProfileForm(StyleFormMixin, UserChangeForm):
+    """Form of user profile"""
 
     class Meta:
         model = User

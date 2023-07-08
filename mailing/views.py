@@ -63,7 +63,7 @@ class ClientCard(DetailView):
 
 
 class ClientCreate(CreateView):
-    """ Create user """
+    """Create client"""
     model = Clients
     form_class = ClientCreateForm
     template_name = "mailing/client_create.html"
@@ -85,7 +85,7 @@ class ClientCreate(CreateView):
 
 
 class ClientUpdate(UpdateView):
-    """Update client."""
+    """Update client"""
     model = Clients
     fields = ["full_name", "comment", "email"]
     template_name = "mailing/client_update.html"
@@ -104,6 +104,7 @@ class ClientUpdate(UpdateView):
 
 
 class ClientDelete(DeleteView):
+    """Delete client"""
     model = Clients
     template_name = "mailing/delete.html"
     slug_url_kwarg = "client_slug"
@@ -124,7 +125,6 @@ class MessagesView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset().all()
-
         if not self.request.user.is_staff:
             queryset = super().get_queryset().filter(owner=self.request.user)
         return queryset
@@ -247,7 +247,7 @@ class TransmissionView(ListView):
 
 
 class TransmissionCreate(CreateView):
-    """ Create transmission """
+    """Create transmission"""
     model = Transmission
     form_class = TransmissionCreateForm
     template_name = "mailing/transmission_create.html"
@@ -282,6 +282,7 @@ class TransmissionCreate(CreateView):
             for client in self.object.clients.all():
                 print(client)
                 sendmail(client.email, send_message[0], send_message[1])
+
             # Work with statistic
             statistic = Statistic.objects.get(transmission_id=self.object.pk)
             statistic.status = "FINISHED"
@@ -335,6 +336,7 @@ class TransmissionUpdate(UpdateView):
             for client in self.object.clients.all():
                 print(client)
                 sendmail(client.email, send_message[0], send_message[1])
+
             # Work with statistic
             statistic = Statistic.objects.get(transmission_id=self.object.pk)
             statistic.status = "FINISHED"

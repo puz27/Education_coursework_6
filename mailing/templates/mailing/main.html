@@ -16,7 +16,7 @@
             <div class="card-body">
              <ul class="list-unstyled mt-3 mb-4">
                {% if item.image%}
-                    <li><img src="{% media_path item.image %}" width="150"></li>
+                    <li><img src="{% media_path item.image %}" width="200"></li>
                {% endif %}
               </ul>
                 <a href="{% url 'blog:blog_card' item.slug %}" class="btn btn-sm btn-outline-secondary">View</a>

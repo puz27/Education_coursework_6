@@ -4,16 +4,13 @@ from django.template.defaultfilters import slugify as d_slugify
 from django.shortcuts import render
 import schedule
 import time
-# import datetime
 import mailing.models
 import pytz
 from datetime import datetime
 
 
-def convert_word(words) -> str:
-    """
-    Slugify for russian language.
-    """
+def convert_word(words: str) -> str:
+    """Slugify for russian language"""
     alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z',
                 'и': 'i',
                 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
@@ -24,7 +21,8 @@ def convert_word(words) -> str:
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
 
 
-def sendmail(to, subject, message):
+def sendmail(to: str, subject: str, message: str) -> None:
+    """Send mail fast"""
     send_mail(subject,
               message,
               settings.EMAIL_HOST_USER,
@@ -33,25 +31,27 @@ def sendmail(to, subject, message):
               )
 
 
-def sendmail_after(transmission_id, emails_base, message_theme, message_body):
+def sendmail_after(transmission_id: str, emails_base: list, message_theme: str, message_body: str) -> None:
+    """Send mail for scheduler and save statistic"""
     for mail in emails_base:
         print("SENDING TO:", mail)
         sendmail(mail, message_theme, message_body)
 
-    wu = mailing.models.Statistic.objects.get(transmission_id=transmission_id)
-    wu.status = "FINISHED"
-    wu.mail_answer = "OK"
-    wu.time = datetime.now(pytz.timezone('Europe/Moscow'))
-    wu.save()
+    statistic = mailing.models.Statistic.objects.get(transmission_id=transmission_id)
+    statistic.status = "FINISHED"
+    statistic.mail_answer = "OK"
+    statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
+    statistic.save()
 
 
 def run_schedule(request):
+    """Work with scheduler"""
     if request.method == "GET":
         schedule.clear()
-
         active_transmissions = mailing.models.Transmission.objects.filter(is_published=True)
         print("PREPARE SEND")
-        # DAILY
+
+        # DAILY SCHEDULER
         for transmission in active_transmissions:
             emails_base = []
             print("TRANSMISSION TITLE:", transmission.title)
@@ -79,7 +79,7 @@ def run_schedule(request):
                     change_transmission_status.status = "READY"
                     change_transmission_status.save()
 
-            # WEEKLY
+            # WEEKLY SCHEDULER
             today = datetime.today().weekday()
             if transmission.frequency == "WEEKLY":
                 print("TYPE: SEND WEEKLY")
@@ -113,7 +113,7 @@ def run_schedule(request):
                     change_transmission_status.status = "READY"
                     change_transmission_status.save()
 
-            # MONTHLY
+            # MONTHLY SCHEDULER
             if transmission.frequency == "MONTHLY":
                 print("TYPE: SEND MONTHLY")
                 print("ID:", transmission.pk)
@@ -132,7 +132,7 @@ def run_schedule(request):
                     change_transmission_status.status = "READY"
                     change_transmission_status.save()
 
-            print("----------------------------------------------------")
+            print("ALL JOBS:")
             print(schedule.get_jobs())
 
         while True:
