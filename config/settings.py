@@ -1,6 +1,9 @@
-import os
 from pathlib import Path
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
+env_path = Path('.')/'.env'
+load_dotenv(dotenv_path=env_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,12 +84,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mailing',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        # 'NAME': os.getenv('BASE_NAME'),
-        # 'USER': os.getenv('BASE_USER'),
-        # 'PASSWORD': os.getenv('BASE_PASSWORD'),
+        # 'NAME': 'mailing',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'postgres',
+        'NAME': os.getenv('BASE_NAME'),
+        'USER': os.getenv('BASE_USER'),
+        'PASSWORD': os.getenv('BASE_PASSWORD'),
         }
 }
 
@@ -114,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = False
@@ -137,11 +139,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = 'n.avramenko87@gmail.com'
-
-# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_PASSWORD = 'eifzyqqsuezhxpqu'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_HOST_USER = 'n.avramenko87@gmail.com'
+# EMAIL_HOST_PASSWORD = 'eifzyqqsuezhxpqu'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -163,10 +166,6 @@ CACHES = {
 }
 
 CACHE_ENABLED = os.getenv('CACHE_ENABLED')
-
-dot_env = os.path.join(BASE_DIR, '.env')
-# from dotenv import load_dotenv
-# load_dotenv(dotenv_path=dot_env)
 
 
 

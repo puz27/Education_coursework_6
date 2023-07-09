@@ -3,16 +3,17 @@ from users.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 import psycopg2
+import os
 
 
 def send_query(table, args):
     """Query to base to set roles"""
     connection = psycopg2.connect(
-        host="localhost",
-        database="mailing",
-        user="postgres",
-        password="postgres"
-    )
+        host='localhost',
+        database=os.getenv('BASE_NAME'),
+        user=os.getenv('BASE_USER'),
+        password=os.getenv('BASE_PASSWORD')
+        )
 
     try:
         with connection:
@@ -102,4 +103,3 @@ class Command(BaseCommand):
 
         send_query("users_user_groups", "('1', '2', '1')")
         send_query("users_user_groups", "('2', '3', '2')")
-
