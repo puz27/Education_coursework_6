@@ -43,7 +43,7 @@ SITE_NAME = "127.0.0.1:8000"
 
 CRONTAB_COMMAND_SUFFIX = '2>&1'
 CRONJOBS = [
-    ('*/1 * * * *', 'mailing.services.run_schedule', '>> %s/log.log' % os.path.join(BASE_DIR, 'logs')),
+    ('*/1 * * * *', 'mailing.services.run_schedule', '>> %s/log.log' % os.path.join(BASE_DIR, 'log'))
 ]
 
 MIDDLEWARE = [
@@ -84,9 +84,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'mailing',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'postgres',
         'NAME': os.getenv('BASE_NAME'),
         'USER': os.getenv('BASE_USER'),
         'PASSWORD': os.getenv('BASE_PASSWORD'),
@@ -142,9 +139,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_HOST_USER = 'n.avramenko87@gmail.com'
-# EMAIL_HOST_PASSWORD = 'eifzyqqsuezhxpqu'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
