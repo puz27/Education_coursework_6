@@ -6,13 +6,13 @@
         <tr>
               <th scope="col">#</th>
               <th scope="col">Theme</th>
-            {% if perms.mailing.view_transmission %}
+            {% if perms.mailing.view_messages %}
                 <th scope="col">View</th>
             {% endif %}
-            {% if perms.mailing.change_transmission %}
+            {% if perms.mailing.change_messages %}
                 <th scope="col">Update</th>
             {% endif %}
-            {% if perms.mailing.delete_transmission %}
+            {% if perms.mailing.delete_messages %}
                 <th scope="col">Delete</th>
             {% endif %}
         </tr>
