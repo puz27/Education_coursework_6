@@ -221,38 +221,45 @@
                 Messages
               </a>
             </li>
+
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mailing:transmissions' %}">
                 <svg class="bi"><use xlink:href="#puzzle"/></svg>
                 Transmission
               </a>
             </li>
+
           </ul>
 
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
             <span> Actions </span>
           </h6>
           <ul class="nav flex-column mb-auto">
+            {% if perms.mailing.add_clients %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mailing:client_create' %}">
                 <svg class="bi"><use xlink:href="#people"/></svg>
                 Add New Client
               </a>
             </li>
+            {% endif %}
+            {% if perms.mailing.add_messages %}
            <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mailing:message_create' %}">
                 <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
                 Add Message Template
               </a>
             </li>
+            {% endif %}
              </li>
+            {% if perms.mailing.add_transmission %}
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mailing:transmission_create' %}">
                 <svg class="bi"><use xlink:href="#puzzle"/></svg>
                 Add New Transmission
               </a>
             </li>
-
+            {% endif %}
 
 
           <ul class="nav flex-column mb-auto">

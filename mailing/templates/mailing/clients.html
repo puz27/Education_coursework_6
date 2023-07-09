@@ -8,13 +8,13 @@
               <th scope="col">Client Name</th>
               <th scope="col">Mail Address</th>
               <th scope="col">Comment</th>
-            {% if perms.mailing.view_transmission %}
+            {% if perms.mailing.view_clients %}
                 <th scope="col">View</th>
             {% endif %}
-            {% if perms.mailing.change_transmission %}
+            {% if perms.mailing.change_clients %}
                 <th scope="col">Update</th>
             {% endif %}
-            {% if perms.mailing.delete_transmission %}
+            {% if perms.mailing.delete_clients %}
                 <th scope="col">Delete</th>
             {% endif %}
             </tr>

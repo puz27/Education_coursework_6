@@ -13,7 +13,7 @@
               {% if perms.mailing.view_transmission %}
               <th scope="col">Full View</th>
               {% endif %}
-              {% if perms.mailing.change_transmission %}
+              {% if perms.mailing.view_transmission %}
               <th scope="col">Update</th>
               {% endif %}
               {% if perms.mailing.delete_transmission %}
@@ -41,7 +41,7 @@
             {% if perms.mailing.view_transmission %}
                 <td> <a href="{% url 'mailing:transmission_card' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">View</a></td>
             {% endif %}
-            {% if perms.mailing.change_transmission %}
+            {% if perms.mailing.view_transmission %}
                 <td> <a href="{% url 'mailing:transmission_update' transmission.slug %}"  class="btn btn-sm btn-outline-secondary">Update</a></td>
             {% endif %}
             {% if perms.mailing.delete_transmission %}
