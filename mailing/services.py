@@ -1,3 +1,5 @@
+import smtplib
+
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.defaultfilters import slugify as d_slugify
@@ -21,27 +23,35 @@ def convert_word(words: str) -> str:
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
 
 
-def sendmail(to: str, subject: str, message: str) -> None:
-    """Send mail fast"""
-    send_mail(subject,
-              message,
-              settings.EMAIL_HOST_USER,
-              [to],
-              fail_silently=True
-              )
+def sendmail(transmission_id: str, emails_base: list, message_theme: str, message_body: str) -> None:
+    """Send mail"""
+    try:
+        send_mail(message_theme, message_body, settings.EMAIL_HOST_USER, emails_base, fail_silently=True)
 
+        statistic = mailing.models.Statistic.objects.get(transmission_id=transmission_id)
+        statistic.status = "FINISHED"
+        statistic.mail_answer = "OK"
+        statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
+        statistic.save()
 
-def sendmail_after(transmission_id: str, emails_base: list, message_theme: str, message_body: str) -> None:
-    """Send mail for scheduler and save statistic"""
-    for mail in emails_base:
-        print("SENDING TO:", mail)
-        sendmail(mail, message_theme, message_body)
+        change_transmission_status = mailing.models.Transmission.objects.get(id=transmission_id)
+        change_transmission_status.status = "FINISHED"
+        change_transmission_status.save()
 
-    statistic = mailing.models.Statistic.objects.get(transmission_id=transmission_id)
-    statistic.status = "FINISHED"
-    statistic.mail_answer = "OK"
-    statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
-    statistic.save()
+        print("SEND MAIL")
+
+    except smtplib.SMTPException as send_error:
+
+        print("PROBLEMS WITH SEND MAIL")
+        statistic = mailing.models.Statistic.objects.get(transmission_id=transmission_id)
+        statistic.status = "FINISHED"
+        statistic.mail_answer = "ERROR"
+        statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
+        statistic.save()
+
+        change_transmission_status = mailing.models.Transmission.objects.get(id=transmission_id)
+        change_transmission_status.status = "FINISHED_WITH_ERROR"
+        change_transmission_status.save()
 
 
 def run_schedule(request):
@@ -69,7 +79,7 @@ def run_schedule(request):
                     emails_base.append(client_mail.email)
                     print(emails_base)
 
-                    schedule.every().day.at(convert_time).do(sendmail_after,
+                    schedule.every().day.at(convert_time).do(sendmail,
                                                              emails_base=emails_base,
                                                              message_theme=message.theme,
                                                              message_body=message.body,
@@ -95,19 +105,19 @@ def run_schedule(request):
                     print(emails_base)
 
                     if today == 0:
-                        schedule.every().sunday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().sunday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 1:
-                        schedule.every().monday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().monday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 2:
-                        schedule.every().tuesday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().tuesday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 3:
-                        schedule.every().wednesday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().wednesday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 4:
-                        schedule.every().thursday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().thursday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 5:
-                        schedule.every().friday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().friday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
                     if today == 6:
-                        schedule.every().saturday.at(convert_time).do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                        schedule.every().saturday.at(convert_time).do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
 
                     change_transmission_status = mailing.models.Transmission.objects.get(id=transmission.pk)
                     change_transmission_status.status = "READY"
@@ -126,7 +136,7 @@ def run_schedule(request):
                     print("EMAIL:", client_mail.email)
                     emails_base.append(client_mail.email)
                     print(emails_base)
-                    schedule.every(4).weeks.do(sendmail_after, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
+                    schedule.every(4).weeks.do(sendmail, emails_base=emails_base, message_theme=message.theme, message_body=message.body, transmission_id=transmission.pk)
 
                     change_transmission_status = mailing.models.Transmission.objects.get(id=transmission.pk)
                     change_transmission_status.status = "READY"

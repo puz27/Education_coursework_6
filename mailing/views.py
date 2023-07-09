@@ -2,11 +2,12 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+import config.settings
 from mailing.models import Messages, Clients, Transmission
 from mailing.services import sendmail
 from mailing.forms import TransmissionCreateForm, Statistic, ClientCreateForm, MessageCreateForm
-import pytz
 from blog.models import Blog
+from django.core.cache import cache
 
 
 class MainView(LoginRequiredMixin, ListView):
@@ -14,11 +15,23 @@ class MainView(LoginRequiredMixin, ListView):
     model = Messages
     template_name = "mailing/main.html"
 
+    def get_queryset(self):
+        """Execute blog part cash on main page"""
+        if config.settings.CACHE_ENABLED:
+            key = 'main_blog'
+            cache_data = cache.get(key)
+            if cache_data is None:
+                cache_data = Blog.objects.order_by('?')[:3]
+                cache.set(key, cache_data)
+        else:
+            cache_data = Blog.objects.order_by('?')[:3]
+        return cache_data
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Title"] = "Main"
         # show blogs
-        context["Blog"] = Blog.objects.order_by('?')[:3]
+        context["Blog"] = self.get_queryset()
         # show statistic
         context["all_transmissions"] = len(Transmission.objects.all())
         context["active_transmissions"] = len(Transmission.objects.filter(is_published=True))
@@ -272,23 +285,13 @@ class TransmissionCreate(CreateView):
 
         # Set default data for created transmission
         Statistic.objects.create(transmission_id=self.object.pk)
+
         # Executing send message
         schedule_transmission_time = self.object.time
         current_time = datetime.now().time()
-
         if schedule_transmission_time <= current_time:
-            send_message = self.object.message.get_info()
-            print("!SEND MESSAGE NOW!")
-            for client in self.object.clients.all():
-                print(client)
-                sendmail(client.email, send_message[0], send_message[1])
-
-            # Work with statistic
-            statistic = Statistic.objects.get(transmission_id=self.object.pk)
-            statistic.status = "FINISHED"
-            statistic.mail_answer = "OK"
-            statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
-            statistic.save()
+            message_data = self.object.message.get_info()
+            sendmail(self.object.pk, self.object.clients.all(), message_data[0], message_data[1])
             self.object.status = "FINISHED"
             self.object.save()
 
@@ -329,19 +332,10 @@ class TransmissionUpdate(UpdateView):
         # check send time
         schedule_transmission_time_update = form.cleaned_data["time"]
         current_time = datetime.now().time()
-
-        if schedule_transmission_time_update <= current_time:
-            send_message = self.object.message.get_info()
-            print("!SEND MESSAGE!")
-            for client in self.object.clients.all():
-                print(client)
-                sendmail(client.email, send_message[0], send_message[1])
-
-            # Work with statistic
-            statistic = Statistic.objects.get(transmission_id=self.object.pk)
-            statistic.status = "FINISHED"
-            statistic.mail_answer = "OK"
-            statistic.time = datetime.now(pytz.timezone('Europe/Moscow'))
-            statistic.save()
+        if schedule_transmission_time_update <= current_time and self.object.is_published is True:
+            message_data = self.object.message.get_info()
+            sendmail(self.object.pk, self.object.clients.all(), message_data[0], message_data[1])
+            self.object.status = "FINISHED"
+            self.object.save()
 
         return super().form_valid(form)

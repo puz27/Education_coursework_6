@@ -8,6 +8,7 @@
 <li>Frequency: {{ Transmission.frequency }}</li>
 <li>Message theme: {{ Transmission.message.theme }}</li>
 <li>Message body: {{ Transmission.message.body }}</li>
+<li>Is Published: {{ Transmission.is_published }}</li>
 <br>
 <h5> Clients: </h5>
 {% for client in Transmission.clients.all %}

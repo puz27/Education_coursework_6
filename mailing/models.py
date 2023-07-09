@@ -34,6 +34,7 @@ class Transmission(models.Model):
         Finished = 'FINISHED'
         Created = 'CREATED'
         Running = 'READY'
+        Finished_error = 'FINISHED_WITH_ERROR'
 
     class TransmissionFrequency(models.TextChoices):
         Daily = 'DAILY'
