@@ -57,6 +57,7 @@ coverage.xml
 *.pot
 
 # Django stuff:
+!django_cron_log/django_cron_log.log
 *.log
 local_settings.py
 db.sqlite3
