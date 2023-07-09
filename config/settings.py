@@ -8,7 +8,6 @@ load_dotenv(dotenv_path=env_path)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -16,12 +15,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i$lvp1!-1awu%4wt*wtyq$(c+i9a&2jog)q!7u)7ki0#-8ezed'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 ALLOWED_HOSTS = []
 
-
 # Application definition
+
 
 INSTALLED_APPS = [
     'django_crontab',
@@ -40,12 +38,12 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_NAME = "127.0.0.1:8000"
 
-
 CRONTAB_COMMAND_SUFFIX = '2>&1'
 CRONJOBS = [
     # ('*/1 * * * *', 'mailing.services.run_schedule', '>> %s/django_cron_log.log' % os.path.join(BASE_DIR, 'django_cron_log'))
     ('*/1 * * * *', 'mailing.services.run_schedule')
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
