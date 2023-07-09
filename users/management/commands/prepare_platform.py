@@ -11,7 +11,7 @@ def send_query(table, args):
         host="localhost",
         database="mailing",
         user="postgres",
-        password="123456"
+        password="postgres"
     )
 
     try:
