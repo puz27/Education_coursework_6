@@ -1,9 +1,7 @@
 import smtplib
-
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.defaultfilters import slugify as d_slugify
-from django.shortcuts import render
 import schedule
 import time
 import mailing.models
@@ -21,6 +19,11 @@ def convert_word(words: str) -> str:
                 'я': 'ya'}
 
     return d_slugify(''.join(alphabet.get(w, w) for w in words.lower()))
+
+
+def sendmail_registration(new_user_email: list, message_theme: str, message_body: str):
+    """Send mail for registration"""
+    send_mail(message_theme, message_body, settings.EMAIL_HOST_USER, [new_user_email], fail_silently=True)
 
 
 def sendmail(transmission_id: str, emails_base: list, message_theme: str, message_body: str) -> None:
