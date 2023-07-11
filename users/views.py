@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 import config.settings
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
-from mailing.services import sendmail
+from mailing.services import sendmail_registration
 from django.shortcuts import redirect
 from django.contrib.auth import login
 
@@ -54,7 +54,7 @@ class RegisterView(TitleMixin, CreateView):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         activation_url = reverse_lazy('users:confirm_email', kwargs={'uidb64': uid, 'token': token})
         current_site = config.settings.SITE_NAME
-        sendmail(
+        sendmail_registration(
             user.email,
             "Registration on Site!",
             f"Accept your email address. Go on: http://{current_site}{activation_url}"
